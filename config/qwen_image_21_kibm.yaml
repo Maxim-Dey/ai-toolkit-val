@@ -1,0 +1,109 @@
+job: extension
+config:
+  name: alfa_kib_medium
+  process:
+  - type: sd_trainer
+    training_folder: /ai-toolkit/output
+    training_seed: 42
+    logging:
+      log_every: 1
+    device: cuda:0
+    network:
+      type: lora
+      linear: 32
+      linear_alpha: 32
+    save:
+      dtype: float32
+      save_every: 50
+      max_step_saves_to_keep: 100
+    train_datasets:
+    - train_path: /ai-toolkit/datasets/kib_medium/train
+      mask_path: null
+      mask_min_value: 0.1
+      is_reg: false
+      network_weight: 1
+      num_frames: 1
+      flip_x: false
+      flip_y: false
+      num_repeats: 1
+      control_path_1: null
+      control_path_2: null
+      control_path_3: null
+      default_caption: ""
+      caption_ext: txt
+      caption_dropout_rate: 0.05
+      shuffle_tokens: false
+      cache_text_embeddings: true
+      cache_latents_to_disk: true
+      resolution: 
+        - 1024
+    val_datasets:
+    - val_path: /ai-toolkit/datasets/kib_medium/val
+      resolution: 
+        - 1024
+      val_every_n_steps: 10
+      val_seed_noise: 42
+      val_level_noise_n: 10
+      val_seed_noise_n: 2
+      control_path_1: null
+      control_path_2: null
+      control_path_3: null
+    train:
+      lr: 0.0001
+      lr_scheduler: constant_with_warmup
+      lr_scheduler_params:
+        num_warmup_steps: 100
+      batch_size: 8
+      steps: 2500
+      gradient_accumulation: 2
+      train_unet: true
+      train_text_encoder: false
+      gradient_checkpointing: true
+      noise_scheduler: flowmatch
+      optimizer: adamw8bit
+      timestep_type: shift
+      content_or_style: "balanced"
+      loss_type: mse
+      loss_target: noise
+      optimizer_params:
+        weight_decay: 0.0001
+      skip_first_sample: false
+      force_first_sample: false
+      disable_sampling: false
+      dtype: bf16
+    model:
+      name_or_path: /ai-toolkit/models/diffusion_models/qwen_image_2.1_bf16.safetensors
+      arch: qwen_image_2
+      quantize: false
+      quantize_te: false
+      low_vram: false
+      model_kwargs:
+        rgba: false
+      compile: false
+      extras_name_or_path: /ai-toolkit/models/qwen21-extras
+      vae_dtype: float32
+    sample:
+      sampler: "flowmatch"
+      sample_every: 50
+      sample_start_step: 0
+      width: 1024
+      height: 1024
+      samples:
+        - prompt: "A large gold coin with a '₽' mark is in the center on an empty background."
+        - prompt: "A black suitcase is at the left. A silver padlock is at the right."
+        - prompt: "A metal maze stands on the right. Two red spheres rest on a silver disc to the left of the maze. One red sphere sits on the near rim of the maze. A black platform with a short digital code lies below the disc."
+        - prompt: "A stack of red, black, and silver platforms occupies the left. A padlock rests across the top platform with the shackle pointing right. A silver coin marked ₽ sits under the shackle. Asterisks *** show on a tiny readout facing the near edge of the bottom platform."
+        - prompt: "A copper teapot is in the center. The spout points to the left. A lid with a knob is on top of the teapot. A ceramic cup is on the right of the teapot."
+        - prompt: "A sewing machine is in the center. A thread spool is on the left of the machine. The needle is at the front. A strip of cloth lies under the presser foot."
+        - prompt: "A red wallet occupies mid-frame. A black calculator stands to the left of the wallet. A silver padlock stands to the right. A metal checkmark rests on the wallet. A ₽ coin sits nearer the viewer, ahead of the wallet."
+        - prompt: "A silver tablet occupies mid-frame. A round clock stands to the left of the tablet. A black suitcase stands to the right. A red slider rests on the tablet. A metal gear sits nearer the viewer, ahead of the tablet."
+        - prompt: "A silver coin rests on a black platform. Knurling wraps the rim. Engraving and stipple cover the face, with hairline edges and fine type on the inner ring."
+        - prompt: "A metal gear leans on a red box. Thin lines outline each tooth. Mesh and seams cover the box lid. Tiny code sits on the hub."
+      neg: ""
+      seed: 42
+      walk_seed: false
+      guidance_scale: 3
+      sample_steps: 30
+meta:
+  name: '[name]'
+  version: '1.0'

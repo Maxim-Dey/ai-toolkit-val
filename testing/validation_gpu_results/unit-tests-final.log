@@ -1,0 +1,79 @@
+Dataset: /tmp/tmpgq6fxcw_/val
+  -  Preprocessing image dimensions
+  0%|          | 0/2 [00:00<?, ?it/s]100%|██████████| 2/2 [00:00<00:00, 2908.67it/s]
+  -  Found 2 images
+Bucket sizes for /tmp/tmpgq6fxcw_/val:
+64x64: 2 files
+1 buckets made
+Dataset: /tmp/tmpgq6fxcw_/val
+  -  Preprocessing image dimensions
+  0%|          | 0/2 [00:00<?, ?it/s]100%|██████████| 2/2 [00:00<00:00, 10672.53it/s]
+  -  Found 2 images
+Bucket sizes for /tmp/tmpgq6fxcw_/val:
+64x64: 2 files
+1 buckets made
+Dataset: /tmp/tmpgq6fxcw_/val
+  -  Preprocessing image dimensions
+  0%|          | 0/2 [00:00<?, ?it/s]100%|██████████| 2/2 [00:00<00:00, 11413.07it/s]
+  -  Found 2 images
+Bucket sizes for /tmp/tmpgq6fxcw_/val:
+64x64: 2 files
+1 buckets made
+Dataset: /tmp/tmpm0jw3a12/val
+  -  Preprocessing image dimensions
+  0%|          | 0/2 [00:00<?, ?it/s]100%|██████████| 2/2 [00:00<00:00, 3858.61it/s]
+  -  Found 2 images
+Bucket sizes for /tmp/tmpm0jw3a12/val:
+64x64: 2 files
+1 buckets made
+Dataset: /tmp/tmpm0jw3a12/val
+  -  Preprocessing image dimensions
+  0%|          | 0/2 [00:00<?, ?it/s]100%|██████████| 2/2 [00:00<00:00, 12427.57it/s]
+  -  Found 2 images
+Bucket sizes for /tmp/tmpm0jw3a12/val:
+64x64: 2 files
+1 buckets made
+Dataset: /tmp/tmpgx7yltht/val
+  -  Preprocessing image dimensions
+  0%|          | 0/2 [00:00<?, ?it/s]100%|██████████| 2/2 [00:00<00:00, 4021.38it/s]
+/ai-toolkit/.venv/lib/python3.12/site-packages/pytorch_wavelets/dtcwt/coeffs.py:7: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  from pkg_resources import resource_stream
+WARNING:tensorboard:Detected out of order event.step likely caused by a TensorFlow restart. Purging expired events from Tensorboard display between the previous step: -1 (timestamp: -1) and current step: 20 (timestamp: 1794167770.4629939). Removing 6 scalars, 0 histograms, 0 compressed histograms, 0 images, and 0 audio.
+  -  Found 2 images
+Bucket sizes for /tmp/tmpgx7yltht/val:
+64x64: 2 files
+1 buckets made
+[Gloo] Rank 0 is connected to 1 peer ranks. Expected number of connected peer ranks is : 1
+[Gloo] Rank 1 is connected to 1 peer ranks. Expected number of connected peer ranks is : 1
+Dataset: /tmp/tmp8luf0lf1/val
+  -  Preprocessing image dimensions
+  0%|          | 0/2 [00:00<?, ?it/s]100%|██████████| 2/2 [00:00<00:00, 2783.21it/s]
+  -  Found 2 images
+Bucket sizes for /tmp/tmp8luf0lf1/val:
+64x64: 2 files
+1 buckets made
+Dataset: /tmp/tmp8luf0lf1/val
+  -  Preprocessing image dimensions
+  0%|          | 0/2 [00:00<?, ?it/s]100%|██████████| 2/2 [00:00<00:00, 8729.04it/s]
+  -  Found 2 images
+Bucket sizes for /tmp/tmp8luf0lf1/val:
+64x64: 2 files
+1 buckets made
+Dataset: /tmp/tmp8luf0lf1/val
+  -  Preprocessing image dimensions
+  0%|          | 0/2 [00:00<?, ?it/s]100%|██████████| 2/2 [00:00<00:00, 9078.58it/s]
+  -  Found 2 images
+Bucket sizes for /tmp/tmp8luf0lf1/val:
+64x64: 2 files
+1 buckets made
+Dataset: /tmp/tmp8luf0lf1/val
+  -  Preprocessing image dimensions
+  0%|          | 0/2 [00:00<?, ?it/s]100%|██████████| 2/2 [00:00<00:00, 8848.74it/s]
+----------------------------------------------------------------------
+Ran 48 tests in 4.552s
+
+OK
+  -  Found 2 images
+Bucket sizes for /tmp/tmp8luf0lf1/val:
+64x64: 2 files
+1 buckets made

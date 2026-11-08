@@ -1,0 +1,179 @@
+{
+    "type": "sd_trainer",
+    "training_folder": "/ai-toolkit/testing/.gpu-acceptance/output",
+    "training_seed": 42,
+    "logging": {
+        "log_every": 100
+    },
+    "device": "cuda:0",
+    "network": {
+        "type": "lora",
+        "linear": 32,
+        "linear_alpha": 32
+    },
+    "save": {
+        "dtype": "float32",
+        "save_every": 2,
+        "max_step_saves_to_keep": 2
+    },
+    "train_datasets": [
+        {
+            "train_path": "/ai-toolkit/testing/.gpu-acceptance/data/train",
+            "resolution": [
+                256
+            ],
+            "caption_dropout_rate": 0,
+            "cache_latents_to_disk": true,
+            "cache_text_embeddings": true,
+            "mask_path": "/ai-toolkit/testing/.gpu-acceptance/data/masks/train"
+        }
+    ],
+    "val_datasets": [
+        {
+            "val_path": "/ai-toolkit/testing/.gpu-acceptance/data/val",
+            "resolution": [
+                256
+            ],
+            "val_every_n_steps": 2,
+            "val_seed_noise": 42,
+            "val_level_noise_n": 8,
+            "val_seed_noise_n": 2
+        },
+        {
+            "val_path": "/ai-toolkit/testing/.gpu-acceptance/data/val",
+            "resolution": [
+                256
+            ],
+            "val_every_n_steps": 2,
+            "val_seed_noise": 42,
+            "val_level_noise_n": 8,
+            "val_seed_noise_n": 2,
+            "mask_path": "/ai-toolkit/testing/.gpu-acceptance/data/masks/val"
+        }
+    ],
+    "train": {
+        "lr": 0.0001,
+        "batch_size": 1,
+        "steps": 3,
+        "gradient_accumulation": 2,
+        "train_unet": true,
+        "train_text_encoder": false,
+        "gradient_checkpointing": true,
+        "noise_scheduler": "flowmatch",
+        "optimizer": "adamw8bit",
+        "timestep_type": "shift",
+        "content_or_style": "balanced",
+        "loss_type": "mse",
+        "loss_target": "noise",
+        "optimizer_params": {
+            "weight_decay": 0.0001
+        },
+        "skip_first_sample": false,
+        "force_first_sample": false,
+        "disable_sampling": false,
+        "dtype": "bf16",
+        "num_workers": 0
+    },
+    "model": {
+        "name_or_path": "Qwen/Qwen-Image-2512",
+        "arch": "qwen_image",
+        "quantize": false,
+        "quantize_te": false,
+        "low_vram": false,
+        "model_kwargs": {},
+        "compile": false,
+        "extras_name_or_path": "Qwen/Qwen-Image-2512",
+        "vae_dtype": "float32"
+    },
+    "sample": {
+        "sampler": "flowmatch",
+        "sample_every": 2,
+        "sample_start_step": 0,
+        "width": 256,
+        "height": 256,
+        "samples": [
+            {
+                "prompt": "A large gold coin with a '\u20bd' mark is in the center on an empty background."
+            }
+        ],
+        "neg": "",
+        "seed": 42,
+        "walk_seed": false,
+        "guidance_scale": 3,
+        "sample_steps": 4
+    }
+}
+
+#############################################
+# Running job: acceptance-qwen-image-2512-recheck
+#############################################
+
+
+Running  1 process
+Loading Qwen Image model
+Loading transformer
+Loading checkpoint shards:   0%|          | 0/9 [00:00<?, ?it/s]Loading checkpoint shards:  22%|██▏       | 2/9 [00:00<00:00,  9.11it/s]Loading checkpoint shards:  33%|███▎      | 3/9 [00:00<00:00,  8.77it/s]Loading checkpoint shards:  44%|████▍     | 4/9 [00:00<00:00,  8.49it/s]Loading checkpoint shards:  56%|█████▌    | 5/9 [00:00<00:00,  8.27it/s]Loading checkpoint shards:  67%|██████▋   | 6/9 [00:00<00:00,  8.26it/s]Loading checkpoint shards:  78%|███████▊  | 7/9 [00:00<00:00,  8.43it/s]Loading checkpoint shards:  89%|████████▉ | 8/9 [00:00<00:00,  8.39it/s]Loading checkpoint shards: 100%|██████████| 9/9 [00:00<00:00,  9.05it/s]
+Text Encoder
+Loading weights:   0%|          | 0/729 [00:00<?, ?it/s]Loading weights:  19%|█▉        | 141/729 [00:00<00:00, 1393.80it/s]Loading weights:  39%|███▉      | 287/729 [00:00<00:00, 1380.79it/s]Loading weights:  61%|██████▏   | 447/729 [00:00<00:00, 1453.64it/s]Loading weights:  85%|████████▌ | 622/729 [00:00<00:00, 1545.79it/s]Loading weights: 100%|██████████| 729/729 [00:00<00:00, 1578.92it/s]
+Loading VAE
+Making pipe
+Preparing Model
+Model Loaded
+create LoRA network. base dim (rank): 32, alpha: 32
+neuron dropout: p=None, rank dropout: p=None, module dropout: p=None
+create LoRA for Text Encoder: 0 modules.
+create LoRA for U-Net: 840 modules.
+enable LoRA for U-Net
+Dataset: /ai-toolkit/testing/.gpu-acceptance/data/val
+  -  Preprocessing image dimensions
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:00<00:00, 7612.17it/s]
+  -  Found 1 images
+Bucket sizes for /ai-toolkit/testing/.gpu-acceptance/data/val:
+256x256: 1 files
+1 buckets made
+Dataset: /ai-toolkit/testing/.gpu-acceptance/data/val
+  -  Preprocessing image dimensions
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:00<00:00, 10155.70it/s]
+  -  Found 1 images
+Bucket sizes for /ai-toolkit/testing/.gpu-acceptance/data/val:
+256x256: 1 files
+1 buckets made
+Dataset: /ai-toolkit/testing/.gpu-acceptance/data/train
+  -  Preprocessing image dimensions
+  0%|          | 0/2 [00:00<?, ?it/s]100%|██████████| 2/2 [00:00<00:00, 10305.42it/s]
+  -  Found 2 images
+Bucket sizes for /ai-toolkit/testing/.gpu-acceptance/data/train:
+256x256: 2 files
+1 buckets made
+Caching latents for /ai-toolkit/testing/.gpu-acceptance/data/train
+ - Saving latents to disk
+Caching latents to disk:   0%|          | 0/2 [00:00<?, ?it/s]Caching latents to disk: 100%|██████████| 2/2 [00:00<00:00, 1697.41it/s]
+Caching text_embeddings for /ai-toolkit/testing/.gpu-acceptance/data/train
+ - Saving text embeddings to disk
+Caching text embeddings to disk:   0%|          | 0/2 [00:00<?, ?it/s]Caching text embeddings to disk: 100%|██████████| 2/2 [00:00<00:00, 7646.86it/s]
+Caching embeddings and unloading text encoder
+
+***** UNLOADING TEXT ENCODER *****
+Embeddings cached to disk. We dont need the text encoder anymore
+***********************************
+
+GPU audit: validation at step 0
+GPU audit: repeated metrics {'fixed_checks_digest': '9772fd1cf06c5112337f1080705c7ca083865b426b6853e26130fd40094000fe', 'vae_encodes_during_validation': 0, 'val_loss_mean': 0.14028820861130953, 'val_loss_low_noise': 0.12501997780054808, 'val_loss_high_noise': 0.15555643942207098, 'repeat_max_abs_delta': 0.0}
+GPU audit: last-check failure published no metrics
+Generating baseline samples before training
+Generating Samples:   0%|          | 0/1 [00:00<?, ?it/s]Generating Samples: 100%|██████████| 1/1 [00:02<00:00,  2.31s/it]Generating Samples: 100%|██████████| 1/1 [00:02<00:00,  2.31s/it]
+
+acceptance-qwen-image-2512-recheck:   0%|          | 0/3 [00:00<?, ?it/s]GPU audit: comparing next update with and without validation
+GPU audit: next update delta=0.0, RNG equal=True
+acceptance-qwen-image-2512-recheck:   0%|          | 0/3 [00:19<?, ?it/s, lr: 1.0e-04 loss: 1.215e-01]acceptance-qwen-image-2512-recheck:  33%|███▎      | 1/3 [00:19<00:38, 19.15s/it, lr: 1.0e-04 loss: 1.215e-01]GPU audit: validation at step 2
+GPU audit: repeated metrics {'fixed_checks_digest': '9772fd1cf06c5112337f1080705c7ca083865b426b6853e26130fd40094000fe', 'vae_encodes_during_validation': 0, 'val_loss_mean': 0.13922947738319635, 'val_loss_low_noise': 0.1226790901273489, 'val_loss_high_noise': 0.1557798646390438, 'repeat_max_abs_delta': 0.0}
+acceptance-qwen-image-2512-recheck:  33%|███▎      | 1/3 [00:42<00:38, 19.15s/it, lr: 1.0e-04 loss: 8.713e-02]
+Saving at step 2
+Generating Samples:   0%|          | 0/1 [00:00<?, ?it/s]Generating Samples: 100%|██████████| 1/1 [00:02<00:00,  2.30s/it]Generating Samples: 100%|██████████| 1/1 [00:02<00:00,  2.30s/it]
+
+acceptance-qwen-image-2512-recheck:  67%|██████▋   | 2/3 [00:45<00:19, 19.15s/it, lr: 1.0e-04 loss: 1.789e-01]acceptance-qwen-image-2512-recheck: 100%|██████████| 3/3 [00:45<00:00,  3.66s/it, lr: 1.0e-04 loss: 1.789e-01]GPU audit: validation at step 3
+GPU audit: repeated metrics {'fixed_checks_digest': '9772fd1cf06c5112337f1080705c7ca083865b426b6853e26130fd40094000fe', 'vae_encodes_during_validation': 0, 'val_loss_mean': 0.13892247178591788, 'val_loss_low_noise': 0.12180144619196653, 'val_loss_high_noise': 0.15604349737986922, 'repeat_max_abs_delta': 0.0}
+acceptance-qwen-image-2512-recheck: 100%|██████████| 3/3 [01:06<00:00, 22.32s/it, lr: 1.0e-04 loss: 1.789e-01]
+Generating Samples:   0%|          | 0/1 [00:00<?, ?it/s]Generating Samples: 100%|██████████| 1/1 [00:02<00:00,  2.33s/it]Generating Samples: 100%|██████████| 1/1 [00:02<00:00,  2.33s/it]
+
+

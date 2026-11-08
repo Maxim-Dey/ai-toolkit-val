@@ -1,0 +1,77 @@
+{
+  "repositories": [
+    {
+      "repository": "OpenMOSS-Team/MOSS-Image-Base",
+      "revision": "85975793d8b3d432f1b6e27f352abaa4c2a4c0d3"
+    },
+    {
+      "repository": "OpenMOSS-Team/MOSS-Image-SFT",
+      "revision": "f972bd4b4b9e3852133cc5da954d87bc32cd8fb9"
+    },
+    {
+      "repository": "Qwen/Qwen-Image",
+      "revision": "75e0b4be04f60ec59a75f475837eced720f823b6"
+    },
+    {
+      "repository": "Qwen/Qwen-Image-2.1",
+      "revision": "d26bb61231c349cf6b7896fa83353113880e1ba3"
+    },
+    {
+      "repository": "Qwen/Qwen-Image-2.1-Turbo",
+      "revision": "fc13ba1986fcb905854dc8de2f52eee395f49b5b"
+    },
+    {
+      "repository": "Qwen/Qwen-Image-2512",
+      "revision": "25468b98e3276ca6700de15c6628e51b7de54a26"
+    },
+    {
+      "repository": "Qwen/Qwen-Image-Edit-2511",
+      "revision": "6f3ccc0b56e431dc6a0c2b2039706d7d26f22cb9"
+    },
+    {
+      "repository": "Qwen/Qwen3.5-9B",
+      "revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a"
+    },
+    {
+      "repository": "depth-anything/Depth-Anything-V2-Large-hf",
+      "revision": "7581137eff8d4e94f6e796d3baea0e9fa79b22d2"
+    }
+  ],
+  "local_downloads": [
+    {
+      "file": "diffusion_models/moss_image_base_bf16.safetensors",
+      "commit": "2929efe3cdd506c0a430bcfca70a9a8d805cc095",
+      "etag": "cacd158728a1fb9e57c408a922b54752ec71fceb566b3821269927964e62b41f"
+    },
+    {
+      "file": "diffusion_models/qwen_image_2.1_bf16.safetensors",
+      "commit": "aacf31a6d48e707f352ecba714cee0680da3479b",
+      "etag": "89f4158d066cc33906a199fca85634f766892dd78f49b6698dabf187ac86c4bc"
+    },
+    {
+      "file": "split_files/diffusion_models/qwen_image_bf16.safetensors",
+      "commit": "1f12b17be14c89b026c51a91d67c32f84bb047bc",
+      "etag": "d08fb5d68026c0d87325f9a7b3ad6454061113a2bc73cc883114dae172937ae7"
+    },
+    {
+      "file": "text_encoders/qwen3.5_9b_bf16.safetensors",
+      "commit": "5d50a2252bf1bcd49e5fee9b5f296986d442682b",
+      "etag": "7e6e9f08d598f829cb940e60ac0c698e1f1c27a47daffd7e598cd78c78b4cc53"
+    },
+    {
+      "file": "text_encoders/qwen3vl_8b_bf16.safetensors",
+      "commit": "aacf31a6d48e707f352ecba714cee0680da3479b",
+      "etag": "68bdc82bc1b66851162ae656225e7e2068166b603db19bd5d5a3b90eb12669a9"
+    },
+    {
+      "file": "vae/flux2-vae.safetensors",
+      "commit": "2929efe3cdd506c0a430bcfca70a9a8d805cc095",
+      "etag": "868fe7b343cc8f3a19dbcfcafbc3d5f888802be3f89bd81b65b3621a066ce8f3"
+    },
+    {
+      "file": "vae/qwen_image_2.1_vae_bf16.safetensors",
+      "commit": "aacf31a6d48e707f352ecba714cee0680da3479b",
+      "etag": "bb21f7473051e1ac368515dd3f2e15cd44d7a11748ee8823e1ddca3e4876b7c9"
+    }
+  ]
+}

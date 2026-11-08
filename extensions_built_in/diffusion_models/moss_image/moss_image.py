@@ -453,6 +453,9 @@ class MossImageModel(BaseModel):
     def _batch_ref_latents(
         self, batch: "DataLoaderBatchDTO", batch_size: int, target_pixels: int
     ) -> Optional[List[List[torch.Tensor]]]:
+        if batch.fixed_condition_latents is not None:
+            return [[latent.to(self.device_torch, self.torch_dtype) for latent in sample]
+                    for sample in batch.fixed_condition_latents]
         control_list = batch.control_tensor_list
         if control_list is None and batch.control_tensor is not None:
             control_list = [batch.control_tensor[b : b + 1] for b in range(batch_size)]
@@ -464,6 +467,22 @@ class MossImageModel(BaseModel):
             self._encode_ref_latents(controls, target_pixels=target_pixels)
             for controls in control_list
         ]
+
+    def prepare_validation_conditions(self, batch, seed):
+        from toolkit.validation import isolated_rng, stable_seed
+        if not self.is_edit:
+            return
+        controls = batch.control_tensor_list
+        if controls is None and batch.control_tensor is not None:
+            controls = [[batch.control_tensor[0]]]
+        if not controls:
+            return
+        latents = []
+        target_pixels = batch.tensor.shape[-1] * batch.tensor.shape[-2]
+        for index, image in enumerate(controls[0]):
+            with isolated_rng(stable_seed(seed, 'control', index)):
+                latents.extend(self._encode_ref_latents([image], target_pixels=target_pixels))
+        batch.fixed_condition_latents = [[latent.cpu() for latent in latents]]
 
     def _prep_vlm_images(self, images: List[torch.Tensor]) -> List[torch.Tensor]:
         """References for the vision tower: downscaled (never up) to

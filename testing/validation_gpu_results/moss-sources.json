@@ -1,0 +1,15 @@
+{
+  "revisions": {
+    "OpenMOSS-Team/MOSS-Image-SFT": "f972bd4b4b9e3852133cc5da954d87bc32cd8fb9",
+    "OpenMOSS-Team/MOSS-Image-Base": "85975793d8b3d432f1b6e27f352abaa4c2a4c0d3",
+    "Comfy-Org/MOSS-Image": "2929efe3cdd506c0a430bcfca70a9a8d805cc095",
+    "Comfy-Org/Qwen3.5": "5d50a2252bf1bcd49e5fee9b5f296986d442682b",
+    "Qwen/Qwen3.5-9B": "c202236235762e1c871ad0ccb60c8ee5ba337b9a"
+  },
+  "paths": [
+    "/ai-toolkit/models/diffusion_models/moss_image_sft_bf16.safetensors",
+    "/ai-toolkit/models/diffusion_models/moss_image_base_bf16.safetensors",
+    "/ai-toolkit/models/text_encoders/qwen3.5_9b_bf16.safetensors",
+    "/ai-toolkit/models/vae/flux2-vae.safetensors"
+  ]
+}

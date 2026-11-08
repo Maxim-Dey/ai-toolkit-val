@@ -47,7 +47,8 @@ class BaseTrainProcess(BaseProcess):
         self.first_step = 0
         self.log_dir = self.get_conf('log_dir', self.job.log_dir if hasattr(self.job, 'log_dir') else None)
         self.setup_tensorboard()
-        self.save_training_config()
+        if 'train_datasets' not in config and 'val_datasets' not in config:
+            self.save_training_config()
 
     def run(self):
         super().run()
@@ -63,7 +64,15 @@ class BaseTrainProcess(BaseProcess):
         else:
             print(*args)
 
-    def setup_tensorboard(self):
+    def setup_tensorboard(self, purge_step=None):
+        if 'val_datasets' in self.config:
+            # Delay opening until the restored manifest has been verified.
+            if purge_step is None:
+                return
+            from torch.utils.tensorboard import SummaryWriter
+            self.writer = SummaryWriter(self.log_dir or os.path.join(self.save_root, 'tensorboard'),
+                                        purge_step=purge_step)
+            return
         if self.log_dir:
             from torch.utils.tensorboard import SummaryWriter
             now = datetime.now()

@@ -703,10 +703,17 @@ class LearnableSNRGamma:
 def apply_learnable_snr_gos(
         loss,
         timesteps,
-        learnable_snr_trainer: LearnableSNRGamma
+        learnable_snr_trainer: LearnableSNRGamma,
+        read_only=False,
 ):
-
-    snr, gamma, offset_1, offset_2, scale = learnable_snr_trainer.forward(loss, timesteps)
+    if read_only:
+        from toolkit.validation import interpolate_weights
+        trainer = learnable_snr_trainer
+        table = get_all_snr(trainer.noise_scheduler, loss.device)
+        snr = interpolate_weights(timesteps, torch.arange(len(table)), table)
+        gamma, offset_1, offset_2, scale = [p.detach() for p in (trainer.gamma, trainer.offset_1, trainer.offset_2, trainer.scale)]
+    else:
+        snr, gamma, offset_1, offset_2, scale = learnable_snr_trainer.forward(loss, timesteps)
 
     snr = (snr + offset_1) * scale + offset_2
 
@@ -723,6 +730,7 @@ def apply_snr_weight(
         noise_scheduler: Union['DDPMScheduler'],
         gamma,
         fixed=False,
+        interpolate=False,
 ):
     # will get it from noise scheduler if exist or will calculate it if not
     all_snr = get_all_snr(noise_scheduler, loss.device)
@@ -738,7 +746,11 @@ def apply_snr_weight(
     offset = 0
     if noise_scheduler.timesteps[0] == 1000:
         offset = 1
-    snr = torch.stack([all_snr[(t - offset).int()] for t in timesteps])
+    if interpolate:
+        from toolkit.validation import interpolate_weights
+        snr = interpolate_weights(timesteps, torch.arange(len(all_snr)) + offset, all_snr)
+    else:
+        snr = torch.stack([all_snr[(t - offset).int()] for t in timesteps])
     gamma_over_snr = torch.div(torch.ones_like(snr) * gamma, snr)
     if fixed:
         snr_weight = gamma_over_snr.float().to(loss.device)  # directly using gamma over snr

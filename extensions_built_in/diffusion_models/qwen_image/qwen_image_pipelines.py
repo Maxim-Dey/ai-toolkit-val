@@ -24,6 +24,13 @@ from diffusers.pipelines.qwenimage.pipeline_output import QwenImagePipelineOutpu
 
 
 class QwenImageEditPlusCustomPipeline(QwenImageEditPlusPipeline):
+    def _encode_vae_image(self, image, generator):
+        # Control pixels follow the transformer dtype in prepare_latents, but
+        # the VAE may intentionally compute in FP32.
+        dtype = image.dtype
+        latents = super()._encode_vae_image(image.to(dtype=self.vae.dtype), generator)
+        return latents.to(dtype=dtype)
+
     @torch.no_grad()
     def __call__(
         self,

@@ -1,0 +1,713 @@
+{
+  "status": "passed",
+  "model_count": 7,
+  "scenario_count": 11,
+  "runs": 22,
+  "unit_tests": 48,
+  "cases": [
+    {
+      "case": "qwen-image-final",
+      "model": "Qwen-Image",
+      "status": "passed",
+      "initial": [
+        {
+          "step": 0,
+          "fixed_checks_digest": "9772fd1cf06c5112337f1080705c7ca083865b426b6853e26130fd40094000fe",
+          "vae_encodes_during_validation": 0,
+          "val_loss_mean": 0.11474863276816905,
+          "val_loss_low_noise": 0.08894388796761632,
+          "val_loss_high_noise": 0.14055337756872177,
+          "repeat_max_abs_delta": 0.0
+        },
+        {
+          "step": 2,
+          "fixed_checks_digest": "9772fd1cf06c5112337f1080705c7ca083865b426b6853e26130fd40094000fe",
+          "vae_encodes_during_validation": 0,
+          "val_loss_mean": 0.11465884582139552,
+          "val_loss_low_noise": 0.08879641350358725,
+          "val_loss_high_noise": 0.1405212781392038,
+          "repeat_max_abs_delta": 0.0
+        },
+        {
+          "step": 3,
+          "fixed_checks_digest": "9772fd1cf06c5112337f1080705c7ca083865b426b6853e26130fd40094000fe",
+          "vae_encodes_during_validation": 0,
+          "val_loss_mean": 0.1148642092011869,
+          "val_loss_low_noise": 0.08878584066405892,
+          "val_loss_high_noise": 0.14094257773831487,
+          "repeat_max_abs_delta": 0.0
+        }
+      ],
+      "resume": [
+        {
+          "step": 2,
+          "fixed_checks_digest": "9772fd1cf06c5112337f1080705c7ca083865b426b6853e26130fd40094000fe",
+          "vae_encodes_during_validation": 0,
+          "val_loss_mean": 0.11465884582139552,
+          "val_loss_low_noise": 0.08879641350358725,
+          "val_loss_high_noise": 0.1405212781392038,
+          "repeat_max_abs_delta": 0.0
+        },
+        {
+          "step": 3,
+          "fixed_checks_digest": "9772fd1cf06c5112337f1080705c7ca083865b426b6853e26130fd40094000fe",
+          "vae_encodes_during_validation": 0,
+          "val_loss_mean": 0.11467773444019258,
+          "val_loss_low_noise": 0.08871007990092039,
+          "val_loss_high_noise": 0.14064538897946477,
+          "repeat_max_abs_delta": 0.0
+        }
+      ],
+      "resume_metric_max_abs_delta": 0.0,
+      "next_update_max_abs_delta": 0.0,
+      "next_update_attention_backend": "torch SDPA math",
+      "rng_equal": true
+    },
+    {
+      "case": "qwen-image-2512-recheck",
+      "model": "Qwen-Image-2512",
+      "status": "passed",
+      "initial": [
+        {
+          "step": 0,
+          "fixed_checks_digest": "9772fd1cf06c5112337f1080705c7ca083865b426b6853e26130fd40094000fe",
+          "vae_encodes_during_validation": 0,
+          "val_loss_mean": 0.14028820861130953,
+          "val_loss_low_noise": 0.12501997780054808,
+          "val_loss_high_noise": 0.15555643942207098,
+          "repeat_max_abs_delta": 0.0
+        },
+        {
+          "step": 2,
+          "fixed_checks_digest": "9772fd1cf06c5112337f1080705c7ca083865b426b6853e26130fd40094000fe",
+          "vae_encodes_during_validation": 0,
+          "val_loss_mean": 0.13922947738319635,
+          "val_loss_low_noise": 0.1226790901273489,
+          "val_loss_high_noise": 0.1557798646390438,
+          "repeat_max_abs_delta": 0.0
+        },
+        {
+          "step": 3,
+          "fixed_checks_digest": "9772fd1cf06c5112337f1080705c7ca083865b426b6853e26130fd40094000fe",
+          "vae_encodes_during_validation": 0,
+          "val_loss_mean": 0.13892247178591788,
+          "val_loss_low_noise": 0.12180144619196653,
+          "val_loss_high_noise": 0.15604349737986922,
+          "repeat_max_abs_delta": 0.0
+        }
+      ],
+      "resume": [
+        {
+          "step": 2,
+          "fixed_checks_digest": "9772fd1cf06c5112337f1080705c7ca083865b426b6853e26130fd40094000fe",
+          "vae_encodes_during_validation": 0,
+          "val_loss_mean": 0.13922947738319635,
+          "val_loss_low_noise": 0.1226790901273489,
+          "val_loss_high_noise": 0.1557798646390438,
+          "repeat_max_abs_delta": 0.0
+        },
+        {
+          "step": 3,
+          "fixed_checks_digest": "9772fd1cf06c5112337f1080705c7ca083865b426b6853e26130fd40094000fe",
+          "vae_encodes_during_validation": 0,
+          "val_loss_mean": 0.13855712488293648,
+          "val_loss_low_noise": 0.12169292196631432,
+          "val_loss_high_noise": 0.15542132779955864,
+          "repeat_max_abs_delta": 0.0
+        }
+      ],
+      "resume_metric_max_abs_delta": 0.0,
+      "next_update_max_abs_delta": 0.0,
+      "next_update_attention_backend": "torch SDPA math",
+      "rng_equal": true
+    },
+    {
+      "case": "qwen-image-edit-2511",
+      "model": "Edit-2511, обычное разрешение контролей",
+      "status": "passed",
+      "initial": [
+        {
+          "step": 0,
+          "fixed_checks_digest": "decb3c6377d06e03cbdc27373aa936ef7e7a3f91ef93620ddbeed8e589871198",
+          "vae_encodes_during_validation": 0,
+          "val_loss_mean": 0.07486074562184512,
+          "val_loss_low_noise": 0.0588907761964947,
+          "val_loss_high_noise": 0.09083071504719556,
+          "repeat_max_abs_delta": 0.0
+        },
+        {
+          "step": 2,
+          "fixed_checks_digest": "decb3c6377d06e03cbdc27373aa936ef7e7a3f91ef93620ddbeed8e589871198",
+          "vae_encodes_during_validation": 0,
+          "val_loss_mean": 0.07446943866088987,
+          "val_loss_low_noise": 0.058843296486884356,
+          "val_loss_high_noise": 0.09009558083489537,
+          "repeat_max_abs_delta": 0.0
+        },
+        {
+          "step": 3,
+          "fixed_checks_digest": "decb3c6377d06e03cbdc27373aa936ef7e7a3f91ef93620ddbeed8e589871198",
+          "vae_encodes_during_validation": 0,
+          "val_loss_mean": 0.07412777681602165,
+          "val_loss_low_noise": 0.058550200425088406,
+          "val_loss_high_noise": 0.0897053532069549,
+          "repeat_max_abs_delta": 0.0
+        }
+      ],
+      "resume": [
+        {
+          "step": 2,
+          "fixed_checks_digest": "decb3c6377d06e03cbdc27373aa936ef7e7a3f91ef93620ddbeed8e589871198",
+          "vae_encodes_during_validation": 0,
+          "val_loss_mean": 0.07446943866088987,
+          "val_loss_low_noise": 0.058843296486884356,
+          "val_loss_high_noise": 0.09009558083489537,
+          "repeat_max_abs_delta": 0.0
+        },
+        {
+          "step": 3,
+          "fixed_checks_digest": "decb3c6377d06e03cbdc27373aa936ef7e7a3f91ef93620ddbeed8e589871198",
+          "vae_encodes_during_validation": 0,
+          "val_loss_mean": 0.07404891909100116,
+          "val_loss_low_noise": 0.058494245540350674,
+          "val_loss_high_noise": 0.08960359264165163,
+          "repeat_max_abs_delta": 0.0
+        }
+      ],
+      "resume_metric_max_abs_delta": 0.0,
+      "next_update_max_abs_delta": 0.0,
+      "next_update_attention_backend": "torch SDPA math",
+      "rng_equal": true
+    },
+    {
+      "case": "qwen-image-edit-2511-match-target",
+      "model": "Edit-2511, match_target_res=true",
+      "status": "passed",
+      "initial": [
+        {
+          "step": 0,
+          "fixed_checks_digest": "7876d7cbd55541687be32b1a0541277a25b345458e1ae4f61cef0d208a1ffed9",
+          "vae_encodes_during_validation": 0,
+          "val_loss_mean": 0.060349914245307446,
+          "val_loss_low_noise": 0.04981878837570548,
+          "val_loss_high_noise": 0.07088104011490941,
+          "repeat_max_abs_delta": 0.0
+        },
+        {
+          "step": 2,
+          "fixed_checks_digest": "7876d7cbd55541687be32b1a0541277a25b345458e1ae4f61cef0d208a1ffed9",
+          "vae_encodes_during_validation": 0,
+          "val_loss_mean": 0.05997375652077608,
+          "val_loss_low_noise": 0.049602591036818924,
+          "val_loss_high_noise": 0.07034492200473323,
+          "repeat_max_abs_delta": 0.0
+        },
+        {
+          "step": 3,
+          "fixed_checks_digest": "7876d7cbd55541687be32b1a0541277a25b345458e1ae4f61cef0d208a1ffed9",
+          "vae_encodes_during_validation": 0,
+          "val_loss_mean": 0.05985769205144607,
+          "val_loss_low_noise": 0.049447350297123195,
+          "val_loss_high_noise": 0.07026803380576893,
+          "repeat_max_abs_delta": 0.0
+        }
+      ],
+      "resume": [
+        {
+          "step": 2,
+          "fixed_checks_digest": "7876d7cbd55541687be32b1a0541277a25b345458e1ae4f61cef0d208a1ffed9",
+          "vae_encodes_during_validation": 0,
+          "val_loss_mean": 0.05997375652077608,
+          "val_loss_low_noise": 0.049602591036818924,
+          "val_loss_high_noise": 0.07034492200473323,
+          "repeat_max_abs_delta": 0.0
+        },
+        {
+          "step": 3,
+          "fixed_checks_digest": "7876d7cbd55541687be32b1a0541277a25b345458e1ae4f61cef0d208a1ffed9",
+          "vae_encodes_during_validation": 0,
+          "val_loss_mean": 0.0599879777408205,
+          "val_loss_low_noise": 0.04951504543423653,
+          "val_loss_high_noise": 0.07046091004740447,
+          "repeat_max_abs_delta": 0.0
+        }
+      ],
+      "resume_metric_max_abs_delta": 0.0,
+      "next_update_max_abs_delta": 0.0,
+      "next_update_attention_backend": "torch SDPA math",
+      "rng_equal": true
+    },
+    {
+      "case": "moss-sft",
+      "model": "MOSS SFT, edit",
+      "status": "passed",
+      "initial": [
+        {
+          "step": 0,
+          "fixed_checks_digest": "b72a26210063759a07e5601b74f508302443612b296f5bb8ec06856fffdcbc62",
+          "vae_encodes_during_validation": 0,
+          "val_loss_mean": 0.6150808180682361,
+          "val_loss_low_noise": 0.5928927790373564,
+          "val_loss_high_noise": 0.6372688570991158,
+          "repeat_max_abs_delta": 0.0
+        },
+        {
+          "step": 2,
+          "fixed_checks_digest": "b72a26210063759a07e5601b74f508302443612b296f5bb8ec06856fffdcbc62",
+          "vae_encodes_during_validation": 0,
+          "val_loss_mean": 0.606115143901358,
+          "val_loss_low_noise": 0.5852317571019133,
+          "val_loss_high_noise": 0.6269985307008028,
+          "repeat_max_abs_delta": 0.0
+        },
+        {
+          "step": 3,
+          "fixed_checks_digest": "b72a26210063759a07e5601b74f508302443612b296f5bb8ec06856fffdcbc62",
+          "vae_encodes_during_validation": 0,
+          "val_loss_mean": 0.5919606004220744,
+          "val_loss_low_noise": 0.5731563698500395,
+          "val_loss_high_noise": 0.6107648309941093,
+          "repeat_max_abs_delta": 0.0
+        }
+      ],
+      "resume": [
+        {
+          "step": 2,
+          "fixed_checks_digest": "b72a26210063759a07e5601b74f508302443612b296f5bb8ec06856fffdcbc62",
+          "vae_encodes_during_validation": 0,
+          "val_loss_mean": 0.606115143901358,
+          "val_loss_low_noise": 0.5852317571019133,
+          "val_loss_high_noise": 0.6269985307008028,
+          "repeat_max_abs_delta": 0.0
+        },
+        {
+          "step": 3,
+          "fixed_checks_digest": "b72a26210063759a07e5601b74f508302443612b296f5bb8ec06856fffdcbc62",
+          "vae_encodes_during_validation": 0,
+          "val_loss_mean": 0.5920543274842203,
+          "val_loss_low_noise": 0.5733779094492396,
+          "val_loss_high_noise": 0.6107307455192009,
+          "repeat_max_abs_delta": 0.0
+        }
+      ],
+      "resume_metric_max_abs_delta": 0.0,
+      "next_update_max_abs_delta": 0.0,
+      "next_update_attention_backend": "torch SDPA math",
+      "rng_equal": true
+    },
+    {
+      "case": "moss-sft-plain",
+      "model": "MOSS SFT, обычный",
+      "status": "passed",
+      "initial": [
+        {
+          "step": 0,
+          "fixed_checks_digest": "6beeed79ef143ce46b5ae94cacd397c512a47b4d7003a5a7b8536c037854e33e",
+          "vae_encodes_during_validation": 0,
+          "val_loss_mean": 0.27111743530258536,
+          "val_loss_low_noise": 0.28473653830587864,
+          "val_loss_high_noise": 0.2574983322992921,
+          "repeat_max_abs_delta": 0.0
+        },
+        {
+          "step": 2,
+          "fixed_checks_digest": "6beeed79ef143ce46b5ae94cacd397c512a47b4d7003a5a7b8536c037854e33e",
+          "vae_encodes_during_validation": 0,
+          "val_loss_mean": 0.27045498322695494,
+          "val_loss_low_noise": 0.2844384452328086,
+          "val_loss_high_noise": 0.2564715212211013,
+          "repeat_max_abs_delta": 0.0
+        },
+        {
+          "step": 3,
+          "fixed_checks_digest": "6beeed79ef143ce46b5ae94cacd397c512a47b4d7003a5a7b8536c037854e33e",
+          "vae_encodes_during_validation": 0,
+          "val_loss_mean": 0.27022448973730206,
+          "val_loss_low_noise": 0.2842328492552042,
+          "val_loss_high_noise": 0.25621613021939993,
+          "repeat_max_abs_delta": 0.0
+        }
+      ],
+      "resume": [
+        {
+          "step": 2,
+          "fixed_checks_digest": "6beeed79ef143ce46b5ae94cacd397c512a47b4d7003a5a7b8536c037854e33e",
+          "vae_encodes_during_validation": 0,
+          "val_loss_mean": 0.27045498322695494,
+          "val_loss_low_noise": 0.2844384452328086,
+          "val_loss_high_noise": 0.2564715212211013,
+          "repeat_max_abs_delta": 0.0
+        },
+        {
+          "step": 3,
+          "fixed_checks_digest": "6beeed79ef143ce46b5ae94cacd397c512a47b4d7003a5a7b8536c037854e33e",
+          "vae_encodes_during_validation": 0,
+          "val_loss_mean": 0.26976288901641965,
+          "val_loss_low_noise": 0.28427433129400015,
+          "val_loss_high_noise": 0.25525144673883915,
+          "repeat_max_abs_delta": 0.0
+        }
+      ],
+      "resume_metric_max_abs_delta": 0.0,
+      "next_update_max_abs_delta": 0.0,
+      "next_update_attention_backend": "torch SDPA math",
+      "rng_equal": true
+    },
+    {
+      "case": "moss-base",
+      "model": "MOSS Base, edit",
+      "status": "passed",
+      "initial": [
+        {
+          "step": 0,
+          "fixed_checks_digest": "b72a26210063759a07e5601b74f508302443612b296f5bb8ec06856fffdcbc62",
+          "vae_encodes_during_validation": 0,
+          "val_loss_mean": 0.6066323996831974,
+          "val_loss_low_noise": 0.5874700242032608,
+          "val_loss_high_noise": 0.625794775163134,
+          "repeat_max_abs_delta": 0.0
+        },
+        {
+          "step": 2,
+          "fixed_checks_digest": "b72a26210063759a07e5601b74f508302443612b296f5bb8ec06856fffdcbc62",
+          "vae_encodes_during_validation": 0,
+          "val_loss_mean": 0.5982870113415023,
+          "val_loss_low_noise": 0.579757472500205,
+          "val_loss_high_noise": 0.6168165501827995,
+          "repeat_max_abs_delta": 0.0
+        },
+        {
+          "step": 3,
+          "fixed_checks_digest": "b72a26210063759a07e5601b74f508302443612b296f5bb8ec06856fffdcbc62",
+          "vae_encodes_during_validation": 0,
+          "val_loss_mean": 0.5847533936612308,
+          "val_loss_low_noise": 0.5683141232778629,
+          "val_loss_high_noise": 0.6011926640445987,
+          "repeat_max_abs_delta": 0.0
+        }
+      ],
+      "resume": [
+        {
+          "step": 2,
+          "fixed_checks_digest": "b72a26210063759a07e5601b74f508302443612b296f5bb8ec06856fffdcbc62",
+          "vae_encodes_during_validation": 0,
+          "val_loss_mean": 0.5982870113415023,
+          "val_loss_low_noise": 0.579757472500205,
+          "val_loss_high_noise": 0.6168165501827995,
+          "repeat_max_abs_delta": 0.0
+        },
+        {
+          "step": 3,
+          "fixed_checks_digest": "b72a26210063759a07e5601b74f508302443612b296f5bb8ec06856fffdcbc62",
+          "vae_encodes_during_validation": 0,
+          "val_loss_mean": 0.5841357177123427,
+          "val_loss_low_noise": 0.5673652232314149,
+          "val_loss_high_noise": 0.6009062121932706,
+          "repeat_max_abs_delta": 0.0
+        }
+      ],
+      "resume_metric_max_abs_delta": 0.0,
+      "next_update_max_abs_delta": 0.0,
+      "next_update_attention_backend": "torch SDPA math",
+      "rng_equal": true
+    },
+    {
+      "case": "moss-base-plain",
+      "model": "MOSS Base, обычный",
+      "status": "passed",
+      "initial": [
+        {
+          "step": 0,
+          "fixed_checks_digest": "6beeed79ef143ce46b5ae94cacd397c512a47b4d7003a5a7b8536c037854e33e",
+          "vae_encodes_during_validation": 0,
+          "val_loss_mean": 0.2574334079399705,
+          "val_loss_low_noise": 0.2738164607435465,
+          "val_loss_high_noise": 0.2410503551363945,
+          "repeat_max_abs_delta": 0.0
+        },
+        {
+          "step": 2,
+          "fixed_checks_digest": "6beeed79ef143ce46b5ae94cacd397c512a47b4d7003a5a7b8536c037854e33e",
+          "vae_encodes_during_validation": 0,
+          "val_loss_mean": 0.25739115942269564,
+          "val_loss_low_noise": 0.27376258932054043,
+          "val_loss_high_noise": 0.24101972952485085,
+          "repeat_max_abs_delta": 0.0
+        },
+        {
+          "step": 3,
+          "fixed_checks_digest": "6beeed79ef143ce46b5ae94cacd397c512a47b4d7003a5a7b8536c037854e33e",
+          "vae_encodes_during_validation": 0,
+          "val_loss_mean": 0.2567696631886065,
+          "val_loss_low_noise": 0.2736156368628144,
+          "val_loss_high_noise": 0.23992368951439857,
+          "repeat_max_abs_delta": 0.0
+        }
+      ],
+      "resume": [
+        {
+          "step": 2,
+          "fixed_checks_digest": "6beeed79ef143ce46b5ae94cacd397c512a47b4d7003a5a7b8536c037854e33e",
+          "vae_encodes_during_validation": 0,
+          "val_loss_mean": 0.25739115942269564,
+          "val_loss_low_noise": 0.27376258932054043,
+          "val_loss_high_noise": 0.24101972952485085,
+          "repeat_max_abs_delta": 0.0
+        },
+        {
+          "step": 3,
+          "fixed_checks_digest": "6beeed79ef143ce46b5ae94cacd397c512a47b4d7003a5a7b8536c037854e33e",
+          "vae_encodes_during_validation": 0,
+          "val_loss_mean": 0.25706122908741236,
+          "val_loss_low_noise": 0.27348817512393,
+          "val_loss_high_noise": 0.24063428305089474,
+          "repeat_max_abs_delta": 0.0
+        }
+      ],
+      "resume_metric_max_abs_delta": 0.0,
+      "next_update_max_abs_delta": 0.0,
+      "next_update_attention_backend": "torch SDPA math",
+      "rng_equal": true
+    },
+    {
+      "case": "qwen-21-turbo",
+      "model": "Qwen-Image-2.1-Turbo",
+      "status": "passed",
+      "initial": [
+        {
+          "step": 0,
+          "fixed_checks_digest": "89821ea7606f2ea6a439e82d8bb9afecf5ce077ee772a8f69509162ae7f7e280",
+          "vae_encodes_during_validation": 0,
+          "val_loss_mean": 0.11860243941191584,
+          "val_loss_low_noise": 0.10600419451172154,
+          "val_loss_high_noise": 0.13120068431211016,
+          "repeat_max_abs_delta": 0.0
+        },
+        {
+          "step": 2,
+          "fixed_checks_digest": "89821ea7606f2ea6a439e82d8bb9afecf5ce077ee772a8f69509162ae7f7e280",
+          "vae_encodes_during_validation": 0,
+          "val_loss_mean": 0.11858651113774006,
+          "val_loss_low_noise": 0.1058611113888522,
+          "val_loss_high_noise": 0.13131191088662794,
+          "repeat_max_abs_delta": 0.0
+        },
+        {
+          "step": 3,
+          "fixed_checks_digest": "89821ea7606f2ea6a439e82d8bb9afecf5ce077ee772a8f69509162ae7f7e280",
+          "vae_encodes_during_validation": 0,
+          "val_loss_mean": 0.11843131470959634,
+          "val_loss_low_noise": 0.105575748719275,
+          "val_loss_high_noise": 0.13128688069991767,
+          "repeat_max_abs_delta": 0.0
+        }
+      ],
+      "resume": [
+        {
+          "step": 2,
+          "fixed_checks_digest": "89821ea7606f2ea6a439e82d8bb9afecf5ce077ee772a8f69509162ae7f7e280",
+          "vae_encodes_during_validation": 0,
+          "val_loss_mean": 0.11858651113774006,
+          "val_loss_low_noise": 0.1058611113888522,
+          "val_loss_high_noise": 0.13131191088662794,
+          "repeat_max_abs_delta": 0.0
+        },
+        {
+          "step": 3,
+          "fixed_checks_digest": "89821ea7606f2ea6a439e82d8bb9afecf5ce077ee772a8f69509162ae7f7e280",
+          "vae_encodes_during_validation": 0,
+          "val_loss_mean": 0.11825257753177236,
+          "val_loss_low_noise": 0.10558652939895789,
+          "val_loss_high_noise": 0.1309186256645868,
+          "repeat_max_abs_delta": 0.0
+        }
+      ],
+      "resume_metric_max_abs_delta": 0.0,
+      "next_update_max_abs_delta": 0.0,
+      "next_update_attention_backend": "torch SDPA math",
+      "rng_equal": true
+    },
+    {
+      "case": "qwen-21",
+      "model": "Qwen-Image-2.1",
+      "status": "passed",
+      "initial": [
+        {
+          "step": 0,
+          "fixed_checks_digest": "89821ea7606f2ea6a439e82d8bb9afecf5ce077ee772a8f69509162ae7f7e280",
+          "vae_encodes_during_validation": 0,
+          "val_loss_mean": 0.1128752491204068,
+          "val_loss_low_noise": 0.09944863586376111,
+          "val_loss_high_noise": 0.12630186237705252,
+          "repeat_max_abs_delta": 0.0
+        },
+        {
+          "step": 2,
+          "fixed_checks_digest": "89821ea7606f2ea6a439e82d8bb9afecf5ce077ee772a8f69509162ae7f7e280",
+          "vae_encodes_during_validation": 0,
+          "val_loss_mean": 0.11270223034080118,
+          "val_loss_low_noise": 0.09932726691477001,
+          "val_loss_high_noise": 0.12607719376683235,
+          "repeat_max_abs_delta": 0.0
+        },
+        {
+          "step": 3,
+          "fixed_checks_digest": "89821ea7606f2ea6a439e82d8bb9afecf5ce077ee772a8f69509162ae7f7e280",
+          "vae_encodes_during_validation": 0,
+          "val_loss_mean": 0.11256173359773432,
+          "val_loss_low_noise": 0.09919047611765563,
+          "val_loss_high_noise": 0.125932991077813,
+          "repeat_max_abs_delta": 0.0
+        }
+      ],
+      "resume": [
+        {
+          "step": 2,
+          "fixed_checks_digest": "89821ea7606f2ea6a439e82d8bb9afecf5ce077ee772a8f69509162ae7f7e280",
+          "vae_encodes_during_validation": 0,
+          "val_loss_mean": 0.11270223034080118,
+          "val_loss_low_noise": 0.09932726691477001,
+          "val_loss_high_noise": 0.12607719376683235,
+          "repeat_max_abs_delta": 0.0
+        },
+        {
+          "step": 3,
+          "fixed_checks_digest": "89821ea7606f2ea6a439e82d8bb9afecf5ce077ee772a8f69509162ae7f7e280",
+          "vae_encodes_during_validation": 0,
+          "val_loss_mean": 0.1126594496696877,
+          "val_loss_low_noise": 0.09917758180138965,
+          "val_loss_high_noise": 0.12614131753798574,
+          "repeat_max_abs_delta": 0.0
+        }
+      ],
+      "resume_metric_max_abs_delta": 0.0,
+      "next_update_max_abs_delta": 0.0,
+      "next_update_attention_backend": "torch SDPA math",
+      "rng_equal": true
+    },
+    {
+      "case": "qwen-21-local",
+      "model": "Qwen-2.1, локальные файлы основного YAML",
+      "status": "passed",
+      "initial": [
+        {
+          "step": 0,
+          "fixed_checks_digest": "878a6c891a5bc32365e9d98caf49719098a8c8e4a1cc3d359a898e56ef3fc6d6",
+          "vae_encodes_during_validation": 0,
+          "val_loss_mean": 0.19842557795345783,
+          "val_loss_low_noise": 0.1416183551773429,
+          "val_loss_high_noise": 0.2552328007295728,
+          "repeat_max_abs_delta": 0.0
+        },
+        {
+          "step": 2,
+          "fixed_checks_digest": "878a6c891a5bc32365e9d98caf49719098a8c8e4a1cc3d359a898e56ef3fc6d6",
+          "vae_encodes_during_validation": 0,
+          "val_loss_mean": 0.19769612653180957,
+          "val_loss_low_noise": 0.14156993385404348,
+          "val_loss_high_noise": 0.25382231920957565,
+          "repeat_max_abs_delta": 0.0
+        },
+        {
+          "step": 3,
+          "fixed_checks_digest": "878a6c891a5bc32365e9d98caf49719098a8c8e4a1cc3d359a898e56ef3fc6d6",
+          "vae_encodes_during_validation": 0,
+          "val_loss_mean": 0.1977891162969172,
+          "val_loss_low_noise": 0.14133777376264334,
+          "val_loss_high_noise": 0.25424045883119106,
+          "repeat_max_abs_delta": 0.0
+        }
+      ],
+      "resume": [
+        {
+          "step": 2,
+          "fixed_checks_digest": "878a6c891a5bc32365e9d98caf49719098a8c8e4a1cc3d359a898e56ef3fc6d6",
+          "vae_encodes_during_validation": 0,
+          "val_loss_mean": 0.19769612653180957,
+          "val_loss_low_noise": 0.14156993385404348,
+          "val_loss_high_noise": 0.25382231920957565,
+          "repeat_max_abs_delta": 0.0
+        },
+        {
+          "step": 3,
+          "fixed_checks_digest": "878a6c891a5bc32365e9d98caf49719098a8c8e4a1cc3d359a898e56ef3fc6d6",
+          "vae_encodes_during_validation": 0,
+          "val_loss_mean": 0.19832046143710613,
+          "val_loss_low_noise": 0.14148023910820484,
+          "val_loss_high_noise": 0.2551606837660074,
+          "repeat_max_abs_delta": 0.0
+        }
+      ],
+      "resume_metric_max_abs_delta": 0.0,
+      "next_update_max_abs_delta": 0.0,
+      "next_update_attention_backend": "torch SDPA math",
+      "rng_equal": true
+    }
+  ],
+  "cli_ready": {
+    "status": "passed",
+    "config_sha256": "c6d800e2cbd617f426d88f716b634fa0a5084d9dd5096fe18bfd523d683938dd",
+    "offline": true,
+    "initial_hf_cache": "empty",
+    "transformer": "torch.bfloat16",
+    "text_encoder": "torch.bfloat16",
+    "vae": "torch.float32",
+    "quantize": false,
+    "quantize_te": false,
+    "prompt_encoding": "passed",
+    "training_steps_executed": 0,
+    "configured_steps": 2500,
+    "batch_size": 8,
+    "gradient_accumulation": 2,
+    "command": "cd /ai-toolkit && .venv/bin/python run.py config/qwen_image_21_kibm.yaml",
+    "post_cleanup_cli_help_exit_code": 0,
+    "post_cleanup_paths_valid": true
+  },
+  "cleanup": {
+    "status": "passed",
+    "removed": [
+      "/ai-toolkit/models/diffusion_models/moss_image_base_bf16.safetensors",
+      "/ai-toolkit/models/diffusion_models/moss_image_sft_bf16.safetensors",
+      "/ai-toolkit/models/diffusion_models/qwen_image_bf16.safetensors",
+      "/ai-toolkit/models/text_encoders",
+      "/ai-toolkit/models/vae",
+      "/ai-toolkit/models/split_files",
+      "/ai-toolkit/models/.cache",
+      "/root/.cache/huggingface/hub/models--OpenMOSS-Team--MOSS-Image-Base",
+      "/root/.cache/huggingface/hub/.locks/models--OpenMOSS-Team--MOSS-Image-Base",
+      "/root/.cache/huggingface/hub/models--OpenMOSS-Team--MOSS-Image-SFT",
+      "/root/.cache/huggingface/hub/.locks/models--OpenMOSS-Team--MOSS-Image-SFT",
+      "/root/.cache/huggingface/hub/models--Qwen--Qwen-Image",
+      "/root/.cache/huggingface/hub/.locks/models--Qwen--Qwen-Image",
+      "/root/.cache/huggingface/hub/models--Qwen--Qwen-Image-2.1",
+      "/root/.cache/huggingface/hub/.locks/models--Qwen--Qwen-Image-2.1",
+      "/root/.cache/huggingface/hub/models--Qwen--Qwen-Image-2.1-Turbo",
+      "/root/.cache/huggingface/hub/.locks/models--Qwen--Qwen-Image-2.1-Turbo",
+      "/root/.cache/huggingface/hub/models--Qwen--Qwen-Image-2512",
+      "/root/.cache/huggingface/hub/.locks/models--Qwen--Qwen-Image-2512",
+      "/root/.cache/huggingface/hub/models--Qwen--Qwen-Image-Edit-2511",
+      "/root/.cache/huggingface/hub/.locks/models--Qwen--Qwen-Image-Edit-2511",
+      "/root/.cache/huggingface/hub/models--Qwen--Qwen3.5-9B",
+      "/root/.cache/huggingface/hub/.locks/models--Qwen--Qwen3.5-9B",
+      "/root/.cache/huggingface/hub/models--depth-anything--Depth-Anything-V2-Large-hf",
+      "/root/.cache/huggingface/hub/.locks/models--depth-anything--Depth-Anything-V2-Large-hf",
+      "/root/.cache/huggingface/xet",
+      "/ai-toolkit/testing/.gpu-acceptance",
+      "/ai-toolkit/testing/run_validation_gpu_debug.py",
+      "/tmp/runpod-validation-source.tar.gz"
+    ],
+    "retained_models": [
+      "/ai-toolkit/models/diffusion_models/qwen_image_2.1_bf16.safetensors",
+      "/ai-toolkit/models/qwen21-extras"
+    ],
+    "main_config_sha256": "c6d800e2cbd617f426d88f716b634fa0a5084d9dd5096fe18bfd523d683938dd",
+    "original_image_counts": {
+      "train": 107,
+      "val": 20
+    },
+    "gpu_idle": true,
+    "disk_free_before": 787259940864,
+    "disk_free_after": 1063838425088,
+    "temporary_test_directory_exists": false
+  }
+}

@@ -1,0 +1,285 @@
+{
+  "status": "passed",
+  "resume": false,
+  "validation": [
+    {
+      "step": 0,
+      "fixed_checks_digest": "878a6c891a5bc32365e9d98caf49719098a8c8e4a1cc3d359a898e56ef3fc6d6",
+      "vae_encodes_during_validation": 0,
+      "val_loss_mean": 0.19842557795345783,
+      "val_loss_low_noise": 0.1416183551773429,
+      "val_loss_high_noise": 0.2552328007295728,
+      "repeat_max_abs_delta": 0.0
+    },
+    {
+      "step": 2,
+      "fixed_checks_digest": "878a6c891a5bc32365e9d98caf49719098a8c8e4a1cc3d359a898e56ef3fc6d6",
+      "vae_encodes_during_validation": 0,
+      "val_loss_mean": 0.19769612653180957,
+      "val_loss_low_noise": 0.14156993385404348,
+      "val_loss_high_noise": 0.25382231920957565,
+      "repeat_max_abs_delta": 0.0
+    },
+    {
+      "step": 3,
+      "fixed_checks_digest": "878a6c891a5bc32365e9d98caf49719098a8c8e4a1cc3d359a898e56ef3fc6d6",
+      "vae_encodes_during_validation": 0,
+      "val_loss_mean": 0.1977891162969172,
+      "val_loss_low_noise": 0.14133777376264334,
+      "val_loss_high_noise": 0.25424045883119106,
+      "repeat_max_abs_delta": 0.0
+    }
+  ],
+  "harness_sha256": "dba035b04643368319efd055cb09fa1b4b9794b57db54422dab4c376369d961f",
+  "loaded_model_dtypes": {
+    "transformer": {
+      "torch.bfloat16": 265
+    },
+    "vae": {
+      "torch.float32": 238
+    }
+  },
+  "loaded_text_encoder_dtypes": [
+    {
+      "torch.bfloat16": 750
+    }
+  ],
+  "quantization": {
+    "transformer": false,
+    "text_encoder": false
+  },
+  "input_digest": "3d03b740ccf7947aec40ff99f4f6761815824631ce509af14c07c6b1d9415487",
+  "manifest": {
+    "version": 2,
+    "noise_version": 1,
+    "model": {
+      "arch": "qwen_image_2",
+      "model": {
+        "sha256": "89f4158d066cc33906a199fca85634f766892dd78f49b6698dabf187ac86c4bc"
+      },
+      "extras": {
+        ".cache/huggingface/trees/d26bb61231c349cf6b7896fa83353113880e1ba3.json": "224f5480072b35c99b2cd9091afae58ca6358ad2116e742941aaf457d76caf0e",
+        "model_index.json": "cf1ecd104ea090855d60d8cec0895c1e9d6ee41b2f87e231b678beecd1cf7809",
+        "processor/added_tokens.json": "c0284b582e14987fbd3d5a2cb2bd139084371ed9acbae488829a1c900833c680",
+        "processor/merges.txt": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5",
+        "processor/preprocessor_config.json": "93585062a80db5e8ca038efc7726a3e6411d9db948472d81d63c6303993be8c5",
+        "processor/special_tokens_map.json": "76862e765266b85aa9459767e33cbaf13970f327a0e88d1c65846c2ddd3a1ecd",
+        "processor/tokenizer.json": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+        "processor/tokenizer_config.json": "81ec7bb9530159b326c0bef1d0b6c33d392090524014ea3f0123a3c1eb9c2af5",
+        "processor/video_preprocessor_config.json": "59c5c9eb52182eb14c06ffb10ca9effd29adce5f238a95de23ca14a38dbd2cb1",
+        "processor/vocab.json": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910",
+        "scheduler/scheduler_config.json": "5895f3a167c14a967fe9ac70c64924ae5acc79799e0679fd12907e594a713cd1",
+        "text_encoder/config.json": "6001331949f7f86ab6d791a80b12246d4f8da5159fa08c3e62368a39f36d63a9",
+        "text_encoder/generation_config.json": "4d9818c3d27895c0058828a5f68bc7a4de80c3ae1bcdac90936ce24178063f59",
+        "text_encoder/model-00001-of-00004.safetensors": "dde00291b5f7fb92013895310a3da0ddba78674df9f10d505d375243dc01fc6f",
+        "text_encoder/model-00002-of-00004.safetensors": "9047faccc0a6d98496a52d55f27be1c94a9c259d1e283fbea0128d054a948d42",
+        "text_encoder/model-00003-of-00004.safetensors": "8c54187654c0176b73ae73785bf791dc9a14c9df7fb4310083a09d42048cb57e",
+        "text_encoder/model-00004-of-00004.safetensors": "5311532aaaeae3259eb6a7b2c600636be1159adf7ded35f53579f7d0e7d43cdd",
+        "text_encoder/model.safetensors.index.json": "859146bff8db1d617fca8b457a5223edff963bb70076b3645f2189fe0540a147",
+        "transformer/config.json": "56ae3281c4e6c2d1aa3658252d187488071815fd79bef15808bb0205fc1a2241",
+        "vae/config.json": "9785d527b278cb8b210e9f48a8028d92a4190968ce7e24c8fc85d9d1b82f6ba2",
+        "vae/diffusion_pytorch_model.safetensors": "a07a1b7c4ee2966a1b3bdc37de9b4f983d56937e46619f709a80b6e490675417"
+      },
+      "kwargs": {
+        "rgba": false
+      },
+      "latent_space": "qwen_image_2",
+      "text_space": "qwen_image_2_refmatch",
+      "dtypes": {
+        "torch_dtype": "torch.bfloat16",
+        "vae_torch_dtype": "torch.float32",
+        "te_torch_dtype": "torch.bfloat16"
+      },
+      "torch": "2.8.0+cu128",
+      "numpy": "1.26.4",
+      "bucket_divisibility": 32
+    },
+    "records": [
+      {
+        "target": "be7964b11c0b8c428679bdf444e1ce686c287acd885b273041b4a95a92dc293e",
+        "caption": "4lf4_Ki8_M style. A two-layer round platform is in the center. A volumetric \"%\" sign is slightly shifted to the upper left corner on the platform. A red banknote with the \"₽\" symbol is in the lower right corner above the platform. A black banknote is located below, underneath the red banknote.",
+        "caption_hash": "eb4834ddfe52e915250db92e63d34745388bc3ff5f3c2a33b37704d3d8260cdd",
+        "prepared_caption": "4lf4_Ki8_M style. A two-layer round platform is in the center. A volumetric \"%\" sign is slightly shifted to the upper left corner on the platform. A red banknote with the \"₽\" symbol is in the lower right corner above the platform. A black banknote is located below, underneath the red banknote.",
+        "controls": [],
+        "mask": null,
+        "generated": [],
+        "settings": {
+          "batch_size": null,
+          "deterministic_validation": true,
+          "type": "image",
+          "default_caption": "",
+          "trigger_word": null,
+          "diff_output_preservation": false,
+          "diff_output_preservation_class": "",
+          "random_triggers": [],
+          "random_triggers_max": 1,
+          "caption_ext": ".txt",
+          "random_scale": false,
+          "random_crop": false,
+          "resolution": 256,
+          "scale": 1.0,
+          "buckets": true,
+          "bucket_tolerance": 64,
+          "is_reg": false,
+          "prior_reg": false,
+          "network_weight": 1.0,
+          "token_dropout_rate": 0.0,
+          "shuffle_tokens": false,
+          "caption_dropout_rate": 0.0,
+          "keep_tokens": 0,
+          "flip_x": false,
+          "flip_y": false,
+          "augments": [],
+          "control_from_same_folder": false,
+          "num_controls_from_same_folder": 1,
+          "control_transparent_color": [
+            0,
+            0,
+            0
+          ],
+          "full_size_control_images": true,
+          "alpha_mask": false,
+          "invert_mask": false,
+          "mask_min_value": 0.0,
+          "poi": null,
+          "use_short_captions": false,
+          "num_repeats": 1,
+          "cache_latents": false,
+          "cache_latents_to_disk": false,
+          "cache_tensors_to_disk": false,
+          "cache_clip_vision_to_disk": false,
+          "cache_text_embeddings": false,
+          "load_image_when_caching_latents": false,
+          "standardize_images": false,
+          "augmentations": null,
+          "shuffle_augmentations": false,
+          "caption_type": ".txt",
+          "guidance_type": "targeted",
+          "clip_image_from_same_folder": false,
+          "clip_image_augmentations": null,
+          "clip_image_shuffle_augmentations": false,
+          "replacements": [],
+          "loss_multiplier": 1.0,
+          "num_workers": 2,
+          "prefetch_factor": 2,
+          "pin_memory": false,
+          "batch_load_threads": 8,
+          "cache_latents_num_workers": 6,
+          "extra_values": [],
+          "square_crop": false,
+          "replay_transforms": true,
+          "num_frames": 1,
+          "shrink_video_to_frames": true,
+          "fps": 24,
+          "auto_frame_count": false,
+          "trim_auto_frame_count_tail": true,
+          "debug": false,
+          "controls": [],
+          "fast_image_size": false,
+          "do_i2v": false,
+          "do_audio": false,
+          "audio_preserve_pitch": false,
+          "audio_normalize": false
+        }
+      }
+    ],
+    "hash": "62126f4c3cbf472bc8a959d910539e52deb8c097f7b0fb6e61b709b3f3ffd5c8"
+  },
+  "model_dtypes": {
+    "transformer": {
+      "torch.bfloat16": 265
+    },
+    "vae": {
+      "torch.float32": 238
+    }
+  },
+  "text_encoder_dtypes": [
+    {
+      "torch.float32": 1
+    }
+  ],
+  "gpu": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+  "peak_allocated_bytes": 33754737152,
+  "environment": {
+    "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+    "torch": "2.8.0+cu128",
+    "cuda": "12.8",
+    "diffusers": "0.39.0.dev0",
+    "transformers": "5.5.3",
+    "accelerate": "1.15.0",
+    "cpu_threads": 8
+  },
+  "last_check_failure_published_nothing": true,
+  "input_mismatch_published_nothing": true,
+  "sample_weights_verified_at_steps": [
+    0,
+    2,
+    3
+  ],
+  "pending_gradients_at_update": 0,
+  "next_update_attention_backend": "torch SDPA math",
+  "next_update_max_abs_delta": 0.0,
+  "next_update_rng_equal": true,
+  "tensorboard": {
+    "val_loss_mean": [
+      {
+        "step": 0,
+        "value": 0.19842557609081268
+      },
+      {
+        "step": 2,
+        "value": 0.19769611954689026
+      },
+      {
+        "step": 3,
+        "value": 0.19778911769390106
+      }
+    ],
+    "val_loss_low_noise": [
+      {
+        "step": 0,
+        "value": 0.14161835610866547
+      },
+      {
+        "step": 2,
+        "value": 0.14156992733478546
+      },
+      {
+        "step": 3,
+        "value": 0.14133776724338531
+      }
+    ],
+    "val_loss_high_noise": [
+      {
+        "step": 0,
+        "value": 0.2552328109741211
+      },
+      {
+        "step": 2,
+        "value": 0.25382232666015625
+      },
+      {
+        "step": 3,
+        "value": 0.2542404532432556
+      }
+    ]
+  },
+  "checkpoints": [
+    {
+      "step": 2,
+      "dtypes": [
+        "torch.float32"
+      ],
+      "optimizer": "adamw8bit",
+      "samples": 1
+    },
+    {
+      "step": 3,
+      "dtypes": [
+        "torch.float32"
+      ],
+      "optimizer": "adamw8bit",
+      "samples": 1
+    }
+  ]
+}

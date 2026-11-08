@@ -120,7 +120,7 @@ class QwenImageModel(QwenImageVAEHolderMixin, BaseModel):
         text_encoder.aitk_post_load(**self.component_load_kwargs("te"))
 
         self.print_and_status_update("Loading VAE")
-        vae = QwenImageVAE.load_model(base_model_path, dtype=dtype)
+        vae = QwenImageVAE.load_model(base_model_path, dtype=self.vae_torch_dtype)
 
         self.noise_scheduler = QwenImageModel.get_train_scheduler()
 

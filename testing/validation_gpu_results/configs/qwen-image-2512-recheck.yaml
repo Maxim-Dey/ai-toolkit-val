@@ -1,0 +1,89 @@
+job: extension
+config:
+  name: acceptance-qwen-image-2512-recheck
+  process:
+  - type: sd_trainer
+    training_folder: /ai-toolkit/testing/.gpu-acceptance/output
+    training_seed: 42
+    logging:
+      log_every: 100
+    device: cuda:0
+    network:
+      type: lora
+      linear: 32
+      linear_alpha: 32
+    save:
+      dtype: float32
+      save_every: 2
+      max_step_saves_to_keep: 2
+    train_datasets:
+    - train_path: /ai-toolkit/testing/.gpu-acceptance/data/train
+      resolution:
+      - 256
+      caption_dropout_rate: 0
+      cache_latents_to_disk: true
+      cache_text_embeddings: true
+      mask_path: /ai-toolkit/testing/.gpu-acceptance/data/masks/train
+    val_datasets:
+    - val_path: /ai-toolkit/testing/.gpu-acceptance/data/val
+      resolution: &id001
+      - 256
+      val_every_n_steps: 2
+      val_seed_noise: 42
+      val_level_noise_n: 8
+      val_seed_noise_n: 2
+    - val_path: /ai-toolkit/testing/.gpu-acceptance/data/val
+      resolution: *id001
+      val_every_n_steps: 2
+      val_seed_noise: 42
+      val_level_noise_n: 8
+      val_seed_noise_n: 2
+      mask_path: /ai-toolkit/testing/.gpu-acceptance/data/masks/val
+    train:
+      lr: 0.0001
+      batch_size: 1
+      steps: 3
+      gradient_accumulation: 2
+      train_unet: true
+      train_text_encoder: false
+      gradient_checkpointing: true
+      noise_scheduler: flowmatch
+      optimizer: adamw8bit
+      timestep_type: shift
+      content_or_style: balanced
+      loss_type: mse
+      loss_target: noise
+      optimizer_params:
+        weight_decay: 0.0001
+      skip_first_sample: false
+      force_first_sample: false
+      disable_sampling: false
+      dtype: bf16
+      num_workers: 0
+    model:
+      name_or_path: Qwen/Qwen-Image-2512
+      arch: qwen_image
+      quantize: false
+      quantize_te: false
+      low_vram: false
+      model_kwargs: {}
+      compile: false
+      extras_name_or_path: Qwen/Qwen-Image-2512
+      vae_dtype: float32
+    sample:
+      sampler: flowmatch
+      sample_every: 2
+      sample_start_step: 0
+      width: 256
+      height: 256
+      samples:
+      - prompt: "A large gold coin with a '\u20BD' mark is in the center on an empty\
+          \ background."
+      neg: ''
+      seed: 42
+      walk_seed: false
+      guidance_scale: 3
+      sample_steps: 4
+meta:
+  name: '[name]'
+  version: '1.0'

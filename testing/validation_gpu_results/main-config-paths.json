@@ -1,0 +1,60 @@
+{
+  "config_sha256": "c6d800e2cbd617f426d88f716b634fa0a5084d9dd5096fe18bfd523d683938dd",
+  "paths": {
+    "model": "/ai-toolkit/models/diffusion_models/qwen_image_2.1_bf16.safetensors",
+    "extras": "/ai-toolkit/models/qwen21-extras",
+    "train": "/ai-toolkit/datasets/kib_medium/train",
+    "val": "/ai-toolkit/datasets/kib_medium/val"
+  },
+  "image_counts": {
+    "train": 107,
+    "val": 20
+  },
+  "steps": 2500,
+  "batch_size": 8,
+  "gradient_accumulation": 2,
+  "weights": [
+    {
+      "path": "/ai-toolkit/models/diffusion_models/qwen_image_2.1_bf16.safetensors",
+      "bytes": 14230280616,
+      "dtypes": {
+        "BF16": 265
+      }
+    },
+    {
+      "path": "/ai-toolkit/models/qwen21-extras/text_encoder/model-00004-of-00004.safetensors",
+      "bytes": 2704357976,
+      "dtypes": {
+        "BF16": 40
+      }
+    },
+    {
+      "path": "/ai-toolkit/models/qwen21-extras/text_encoder/model-00002-of-00004.safetensors",
+      "bytes": 4915962464,
+      "dtypes": {
+        "BF16": 142
+      }
+    },
+    {
+      "path": "/ai-toolkit/models/qwen21-extras/text_encoder/model-00001-of-00004.safetensors",
+      "bytes": 4998056552,
+      "dtypes": {
+        "BF16": 426
+      }
+    },
+    {
+      "path": "/ai-toolkit/models/qwen21-extras/text_encoder/model-00003-of-00004.safetensors",
+      "bytes": 4915962496,
+      "dtypes": {
+        "BF16": 142
+      }
+    },
+    {
+      "path": "/ai-toolkit/models/qwen21-extras/vae/diffusion_pytorch_model.safetensors",
+      "bytes": 1350989512,
+      "dtypes": {
+        "F32": 238
+      }
+    }
+  ]
+}

@@ -949,6 +949,35 @@ class QwenImage21Transformer2DModel(
         ]
 
     @classmethod
+    def aitk_from_pretrained(cls, path, subfolder=None, dtype=None, **kwargs):
+        # HF checkpoints split gate/up weights, including across shard
+        # boundaries. Route the complete state through our existing converter;
+        # diffusers' direct loader would leave gate_up parameters on meta.
+        import json
+        from pathlib import Path
+        from huggingface_hub import snapshot_download
+        from safetensors.torch import load_file
+
+        root = Path(path)
+        if not root.is_dir():
+            prefix = f"{subfolder}/" if subfolder else ""
+            root = Path(snapshot_download(
+                path, allow_patterns=[f"{prefix}*.json", f"{prefix}*.safetensors"], **kwargs
+            ))
+        folder = root / subfolder if subfolder else root
+        index = folder / "diffusion_pytorch_model.safetensors.index.json"
+        if index.is_file():
+            shards = sorted(set(json.loads(index.read_text())["weight_map"].values()))
+        else:
+            shards = ["diffusion_pytorch_model.safetensors"]
+        state = {}
+        for shard in shards:
+            state.update(load_file(str(folder / shard)))
+        return cls.load_from_state_dict(
+            state, dtype, config_path=str(root), subfolder=subfolder
+        )
+
+    @classmethod
     def convert_state_dict_on_load(cls, state_dict):
         """Accept the diffusers key layout (split `img_mlp.gate_layer`/`proj`)
         as well as the comfy one this class uses natively (fused

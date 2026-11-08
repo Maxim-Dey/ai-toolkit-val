@@ -63,7 +63,7 @@ from tqdm import tqdm
 
 from toolkit.config_modules import SaveConfig, LoggingConfig, SampleConfig, NetworkConfig, TrainConfig, ModelConfig, \
     GenerateImageConfig, EmbeddingConfig, DatasetConfig, preprocess_dataset_raw_config, AdapterConfig, GuidanceConfig, validate_configs, \
-    DecoratorConfig
+    DecoratorConfig, normalize_dataset_configs, validate_validation_model
 from toolkit.logging_aitk import create_logger
 from diffusers import FluxTransformer2DModel
 from toolkit.accelerator import get_accelerator, unwrap_model
@@ -81,7 +81,15 @@ from toolkit.basic import flush
 class BaseSDTrainProcess(BaseTrainProcess):
 
     def __init__(self, process_id: int, job, config: OrderedDict, custom_pipeline=None):
+        raw_datasets, validation_config, uses_dataset_split = normalize_dataset_configs(config)
         super().__init__(process_id, job, config)
+        self.deterministic_validation_config = validation_config
+        self.uses_dataset_split = uses_dataset_split
+        self.completed_optimizer_steps = 0
+        self._validation_inputs = None
+        self._last_validation_step = None
+        self._resume_state = None
+        self._accumulation_pending = False
         self.accelerator: Accelerator = get_accelerator()
         if self.accelerator.is_local_main_process:
             transformers.utils.logging.set_verbosity_warning()
@@ -141,7 +149,6 @@ class BaseSDTrainProcess(BaseTrainProcess):
 
         # store is all are cached. Allows us to not load vae if we don't need to
         self.is_latents_cached = True
-        raw_datasets = self.get_conf('datasets', None)
         if raw_datasets is not None and len(raw_datasets) > 0:
             raw_datasets = preprocess_dataset_raw_config(raw_datasets)
         self.datasets = None
@@ -180,6 +187,16 @@ class BaseSDTrainProcess(BaseTrainProcess):
                     self.datasets.append(dataset)
                 self.dataset_configs.append(dataset)
         
+        if self.uses_dataset_split:
+            val_datasets = self.deterministic_validation_config.datasets if self.deterministic_validation_config else []
+            validate_validation_model(self.model_config, self.dataset_configs + val_datasets)
+            if self.model_config.arch == 'qwen_image_edit_plus':
+                from toolkit.validation import input_manifest
+                input_manifest(self.dataset_configs, {}, require_generated=False)
+            if val_datasets:
+                from toolkit.validation import input_manifest
+                input_manifest(val_datasets, {}, self.dataset_configs, require_generated=False)
+
         self.is_caching_text_embeddings = any(
             dataset.cache_text_embeddings for dataset in self.dataset_configs
         )
@@ -280,10 +297,27 @@ class BaseSDTrainProcess(BaseTrainProcess):
         return generate_image_config_list
 
     def sample(self, step=None, is_first=False):
+        if self.uses_dataset_split:
+            from toolkit.validation import isolated_rng, isolated_modules, model_modules
+            with isolated_rng(), isolated_modules(model_modules(self.sd)):
+                can_merge = self.network.can_merge_in
+                self.network.can_merge_in = False
+                try:
+                    return self._sample(step, is_first)
+                finally:
+                    self.network.can_merge_in = can_merge
+                    if self.ema is not None:
+                        self.ema.train()
+        return self._sample(step, is_first)
+
+    def _sample(self, step=None, is_first=False):
         if not self.accelerator.is_main_process:
             return
         flush()
         sample_folder = os.path.join(self.save_root, 'samples')
+        if self.uses_dataset_split:
+            from toolkit.validation_checkpoint import step_path
+            sample_folder = str(step_path(self.save_root, self.name, self.completed_optimizer_steps) / 'samples')
         gen_img_config_list = []
 
         sample_config = self.first_sample_config if is_first else self.sample_config
@@ -504,6 +538,12 @@ class BaseSDTrainProcess(BaseTrainProcess):
         pass
 
     def save(self, step=None):
+        if self.uses_dataset_split:
+            if self.accelerator.is_main_process:
+                from toolkit.validation_checkpoint import save_checkpoint
+                save_checkpoint(self)
+                self.last_save_step = self.completed_optimizer_steps
+            return
         if not self.accelerator.is_main_process:
             return
         flush()
@@ -824,6 +864,16 @@ class BaseSDTrainProcess(BaseTrainProcess):
         pass
 
     def get_latest_save_path(self, name=None, post='', include_pretrained_lora=True):
+        if self.uses_dataset_split:
+            from toolkit.validation_checkpoint import select_checkpoint, read_checkpoint
+            path = select_checkpoint(self.save_root, self.name, self.get_conf('resume_from', None))
+            if path is not None:
+                self._resume_state = read_checkpoint(path)
+                self.step_num = self.start_step = self.completed_optimizer_steps = self._resume_state['step']
+                return str(path / 'model.safetensors')
+            if os.path.isfile(os.path.join(self.save_root, 'optimizer.pt')):
+                raise ValueError('Legacy optimizer cannot resume the new mode. Use a new run name and network.pretrained_lora_path.')
+            return self.network_config.pretrained_lora_path if include_pretrained_lora and self.network_config else None
         if name == None:
             name = self.job.name
         # get latest saved step
@@ -1565,6 +1615,18 @@ class BaseSDTrainProcess(BaseTrainProcess):
         self.sd.adapter = self.adapter
     
     def setup_validation(self):
+        if self.deterministic_validation_config is not None:
+            from toolkit.validation import ValidationInputs, preflight_loss, main_process_call
+            preflight_loss(self)
+            def prepare():
+                expected = self._resume_state['manifest'] if self._resume_state else None
+                if self._resume_state and expected is None:
+                    raise ValueError('Checkpoint has no validation manifest; initialize a new run from its weights')
+                self._validation_inputs = ValidationInputs(self.deterministic_validation_config, self.sd,
+                                                           self.dataset_configs, expected_manifest=expected)
+                self.setup_tensorboard(purge_step=self.completed_optimizer_steps)
+            main_process_call(self.accelerator, prepare)
+            return
         # caches everything needed for validation (latents, prompt embeds, fixed noise)
         # must be called while the vae and text encoder are still loaded, they may be
         # dumped later to save memory
@@ -1656,6 +1718,18 @@ class BaseSDTrainProcess(BaseTrainProcess):
         flush()
 
     def validate(self):
+        if self.deterministic_validation_config is not None:
+            if self._last_validation_step == self.completed_optimizer_steps:
+                return
+            from toolkit.validation import evaluate_validation, main_process_call
+            def evaluate_and_publish():
+                metrics = evaluate_validation(self, self._validation_inputs)
+                for tag, value in metrics.items():
+                    self.writer.add_scalar(tag, value, self.completed_optimizer_steps)
+                self.writer.flush()
+            main_process_call(self.accelerator, evaluate_and_publish)
+            self._last_validation_step = self.completed_optimizer_steps
+            return
         val_config = self.train_config.validation_config
         if val_config is None or self._validation_cache is None:
             return
@@ -1719,7 +1793,19 @@ class BaseSDTrainProcess(BaseTrainProcess):
         if was_unet_training:
             self.sd.unet.train()
 
+    def maybe_validate(self, initial=False, final=False):
+        config = self.deterministic_validation_config
+        if config is not None and (initial or final or (
+                self._did_optimizer_step and self.completed_optimizer_steps % config.val_every_n_steps == 0)):
+            self.validate()
+
     def run(self):
+        if self.uses_dataset_split:
+            distribution = self.accelerator.distributed_type.name
+            if distribution not in ('NO', 'MULTI_GPU', 'MULTI_CPU'):
+                raise ValueError(f'Deterministic validation does not support {distribution} sharding')
+            if self.network_config is None or self.train_config.merge_network_on_save or self.embed_config or self.adapter_config:
+                raise ValueError('Completed-step checkpoints require standalone LoRA training without merged saves')
         # torch.autograd.set_detect_anomaly(True)
         # run base process run
         BaseTrainProcess.run(self)
@@ -1878,7 +1964,7 @@ class BaseSDTrainProcess(BaseTrainProcess):
         unet.requires_grad_(False)
         unet.eval()
         if vae is not None:
-            vae = vae.to(torch.device('cpu'), dtype=dtype)
+            vae = vae.to(torch.device('cpu'), dtype=self.sd.vae_torch_dtype)
             vae.requires_grad_(False)
             vae.eval()
         if self.train_config.learnable_snr_gos:
@@ -1887,7 +1973,7 @@ class BaseSDTrainProcess(BaseTrainProcess):
             )
             # check to see if previous settings exist
             path_to_load = os.path.join(self.save_root, 'learnable_snr.json')
-            if os.path.exists(path_to_load):
+            if not self.uses_dataset_split and os.path.exists(path_to_load):
                 with open(path_to_load, 'r') as f:
                     json_data = json.load(f)
                     if 'offset' in json_data:
@@ -2149,6 +2235,8 @@ class BaseSDTrainProcess(BaseTrainProcess):
         #         self.params.append(param)
 
         if self.train_config.start_step is not None:
+            if self.uses_dataset_split and self.train_config.start_step != self.completed_optimizer_steps:
+                raise ValueError('train.start_step must match the selected complete checkpoint; use resume_from to select one')
             self.step_num = self.train_config.start_step
             self.start_step = self.step_num
 
@@ -2168,7 +2256,7 @@ class BaseSDTrainProcess(BaseTrainProcess):
         # check if it exists
         optimizer_state_filename = f'optimizer.pt'
         optimizer_state_file_path = os.path.join(self.save_root, optimizer_state_filename)
-        if os.path.exists(optimizer_state_file_path):
+        if not self.uses_dataset_split and os.path.exists(optimizer_state_file_path):
             # try to load
             # previous param groups
             # previous_params = copy.deepcopy(optimizer.param_groups)
@@ -2219,10 +2307,15 @@ class BaseSDTrainProcess(BaseTrainProcess):
             **lr_scheduler_params
         )
         self.lr_scheduler = lr_scheduler
+        if self._resume_state is not None:
+            from toolkit.validation_checkpoint import restore_training_state
+            restore_training_state(self, self._resume_state)
 
         # cache validation latents and embeddings now, the vae and text encoder
         # may be dumped before the train loop starts
         self.setup_validation()
+        if self.uses_dataset_split and self.accelerator.is_main_process:
+            self.save_training_config()
 
         ### HOOk ###
         self.before_dataset_load()
@@ -2479,6 +2572,12 @@ class BaseSDTrainProcess(BaseTrainProcess):
                     print_acc(f"Failed to compile model: {e}")
                     print_acc("Continuing without compilation")
 
+        if self.uses_dataset_split:
+            if self._resume_state is not None:
+                from toolkit.validation_checkpoint import restore_rng
+                restore_rng(self._resume_state['rng'])
+            self.maybe_validate(initial=True)
+
         if self.has_first_sample_requested and self.step_num <= 1 and not self.train_config.disable_sampling:
             print_acc("Generating first sample from first sample config")
             self.sample(0, is_first=True)
@@ -2519,7 +2618,8 @@ class BaseSDTrainProcess(BaseTrainProcess):
         # zero any gradients
         optimizer.zero_grad()
 
-        self.lr_scheduler.step(self.step_num)
+        if not self.uses_dataset_split:
+            self.lr_scheduler.step(self.step_num)
 
         self.sd.set_device_state(self.train_device_state_preset)
         flush()
@@ -2540,7 +2640,13 @@ class BaseSDTrainProcess(BaseTrainProcess):
         start_step_num = self.step_num
         did_first_flush = False
         flush_next = False
-        for step in range(start_step_num, self.train_config.steps):
+        def training_iterations():
+            index = start_step_num
+            while (self.completed_optimizer_steps if self.uses_dataset_split else index) < self.train_config.steps:
+                yield index
+                index += 1
+
+        for step in training_iterations():
             if self.train_config.do_paramiter_swapping:
                 self.optimizer.optimizer.swap_paramiters()
             self.timer.start('train_loop')
@@ -2550,7 +2656,8 @@ class BaseSDTrainProcess(BaseTrainProcess):
             if self.train_config.do_random_cfg:
                 self.train_config.do_cfg = True
                 self.train_config.cfg_scale = value_map(random.random(), 0, 1, 1.0, self.train_config.max_cfg_scale)
-            self.step_num = step
+            if not self.uses_dataset_split:
+                self.step_num = step
             # default to true so various things can turn it off
             self.is_grad_accumulation_step = True
             if self.train_config.free_u:
@@ -2641,6 +2748,9 @@ class BaseSDTrainProcess(BaseTrainProcess):
                 else:
                     raise  # not an OOM; surface real errors
             if did_oom:
+                if self.uses_dataset_split:
+                    self._accumulation_pending = False
+                    self.grad_accumulation_step = 0
                 self.num_consecutive_oom += 1
                 if self.num_consecutive_oom > 3:
                     raise RuntimeError("OOM during training step 3 times in a row, aborting training")
@@ -2662,6 +2772,17 @@ class BaseSDTrainProcess(BaseTrainProcess):
                 print("\n==== Profile Results ====")
                 print(self.torch_profiler.key_averages().table(sort_by="cpu_time_total", row_limit=1000))
             self.timer.stop('train_loop')
+
+            if self.uses_dataset_split:
+                updated = not did_oom and self._did_optimizer_step
+                is_save_step = updated and self.save_config.save_every and self.step_num % self.save_config.save_every == 0
+                is_sample_step = (updated and not self.train_config.disable_sampling and self.sample_config.sample_every
+                                  and self.step_num >= self.sample_config.sample_start_step
+                                  and self.step_num % self.sample_config.sample_every == 0)
+                if not updated:
+                    loss_dict = None
+                if updated and self.deterministic_validation_config and self.step_num % self.deterministic_validation_config.val_every_n_steps == 0:
+                    self.maybe_validate()
 
             # run validation before any possible sampling/logging for this step
             if not did_oom and self.train_config.validation_config is not None:
@@ -2758,6 +2879,8 @@ class BaseSDTrainProcess(BaseTrainProcess):
                                         for key, value in loss_dict.items():
                                             self.writer.add_scalar(f"{key}", value, self.step_num)
                                         self.writer.add_scalar(f"lr", learning_rate, self.step_num)
+                                        if self.uses_dataset_split:
+                                            self.writer.flush()
 
                         if self.accelerator.is_main_process:
                             # log to logger
@@ -2781,10 +2904,11 @@ class BaseSDTrainProcess(BaseTrainProcess):
                             self.logger.log({
                                 'learning_rate': learning_rate,
                             })
-                            for key, value in loss_dict.items():
-                                self.logger.log({
-                                    f'loss/{key}': value,
-                                })
+                            if loss_dict is not None:
+                                for key, value in loss_dict.items():
+                                    self.logger.log({
+                                        f'loss/{key}': value,
+                                    })
                             if self.additional_logs is not None:
                                 for key, value in self.additional_logs.items():
                                     self.logger.log({
@@ -2805,14 +2929,15 @@ class BaseSDTrainProcess(BaseTrainProcess):
 
                 # sets progress bar to match our step (step is complete, so completed count is step + 1)
                 if self.progress_bar is not None:
-                    self.progress_bar.update(step + 1 - self.progress_bar.n)
+                    self.progress_bar.update((self.step_num if self.uses_dataset_split else step + 1) - self.progress_bar.n)
 
                 #############################
                 # End of step
                 #############################
 
                 # update various steps
-                self.step_num = step + 1
+                if not self.uses_dataset_split:
+                    self.step_num = step + 1
                 self.grad_accumulation_step += 1
                 self.end_step_hook()
 
@@ -2821,6 +2946,8 @@ class BaseSDTrainProcess(BaseTrainProcess):
         ##  END TRAIN LOOP
         ###################################################################
         self.accelerator.wait_for_everyone()
+        if self.uses_dataset_split:
+            self.maybe_validate(final=True)
         if self.progress_bar is not None:
             self.progress_bar.close()
         if self.train_config.free_u:
@@ -2833,6 +2960,8 @@ class BaseSDTrainProcess(BaseTrainProcess):
         print_acc("")
         if self.accelerator.is_main_process:
             self.logger.finish()
+            if self.uses_dataset_split and self.writer is not None:
+                self.writer.close()
         self.accelerator.end_training()
 
         if self.accelerator.is_main_process:

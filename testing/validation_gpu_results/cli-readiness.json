@@ -1,0 +1,19 @@
+{
+  "status": "passed",
+  "config_sha256": "c6d800e2cbd617f426d88f716b634fa0a5084d9dd5096fe18bfd523d683938dd",
+  "offline": true,
+  "initial_hf_cache": "empty",
+  "transformer": "torch.bfloat16",
+  "text_encoder": "torch.bfloat16",
+  "vae": "torch.float32",
+  "quantize": false,
+  "quantize_te": false,
+  "prompt_encoding": "passed",
+  "training_steps_executed": 0,
+  "configured_steps": 2500,
+  "batch_size": 8,
+  "gradient_accumulation": 2,
+  "command": "cd /ai-toolkit && .venv/bin/python run.py config/qwen_image_21_kibm.yaml",
+  "post_cleanup_cli_help_exit_code": 0,
+  "post_cleanup_paths_valid": true
+}

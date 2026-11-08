@@ -1,0 +1,117 @@
+{
+  "status": "passed",
+  "completed": [
+    {
+      "model": "qwen-image",
+      "resume": false
+    },
+    {
+      "model": "qwen-image",
+      "resume": true
+    },
+    {
+      "model": "qwen-image-2512",
+      "resume": false
+    },
+    {
+      "model": "qwen-image-2512",
+      "resume": true
+    },
+    {
+      "model": "qwen-image-edit-2511-match-target",
+      "resume": false
+    },
+    {
+      "model": "qwen-image-edit-2511-match-target",
+      "resume": true
+    },
+    {
+      "model": "qwen-image-edit-2511",
+      "resume": false
+    },
+    {
+      "model": "qwen-image-edit-2511",
+      "resume": true
+    },
+    {
+      "model": "moss-sft",
+      "resume": false
+    },
+    {
+      "model": "moss-sft",
+      "resume": true
+    },
+    {
+      "model": "moss-sft-plain",
+      "resume": false
+    },
+    {
+      "model": "moss-sft-plain",
+      "resume": true
+    },
+    {
+      "model": "moss-base",
+      "resume": false
+    },
+    {
+      "model": "moss-base",
+      "resume": true
+    },
+    {
+      "model": "moss-base-plain",
+      "resume": false
+    },
+    {
+      "model": "moss-base-plain",
+      "resume": true
+    },
+    {
+      "model": "qwen-21-turbo",
+      "resume": false
+    },
+    {
+      "model": "qwen-21-turbo",
+      "resume": true
+    },
+    {
+      "model": "qwen-21",
+      "resume": false
+    },
+    {
+      "model": "qwen-21",
+      "resume": true
+    },
+    {
+      "model": "qwen-image-final",
+      "resume": false
+    },
+    {
+      "model": "qwen-image-final",
+      "resume": true
+    },
+    {
+      "model": "qwen-image-2512-recheck",
+      "resume": false
+    },
+    {
+      "model": "qwen-image-2512-recheck",
+      "resume": true
+    },
+    {
+      "model": "qwen-21-local",
+      "resume": false
+    },
+    {
+      "model": "qwen-21-local",
+      "resume": true
+    }
+  ],
+  "current": {
+    "model": "qwen-21-local",
+    "resume": true
+  },
+  "historical_v1_cases": [
+    "qwen-image",
+    "qwen-image-2512"
+  ]
+}

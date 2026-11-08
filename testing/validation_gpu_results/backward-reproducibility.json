@@ -1,0 +1,224 @@
+{
+  "native": {
+    "next_update_max_abs_delta": 0.000191656086826697,
+    "next_update_rng_equal": true,
+    "loss_comparison": {
+      "baseline": {
+        "loss": 0.007844043895602226
+      },
+      "replay": {
+        "loss": 0.007844043895602226
+      }
+    },
+    "updates": [
+      {
+        "phase": "baseline",
+        "grads": "75dd8ae5eb61483b03ef5a9b3a4f4d9fe6afd67179619f3e37178b8c9d8c6ffc",
+        "optimizer": "fadfa65d2626b64a65374d8cac44a5695b2a978393f0b059f0daede2d2b2f7a1",
+        "lr": [
+          0.0001
+        ],
+        "weights": "0466e7f7e4bf82d4915d451de60f451517bb566bfaf4bacf3b6d6e8428c0feca",
+        "optimizer_after": "d50c6d87652debe79211406578b26f151798fa6f98d74dbbe6b83d525131a378"
+      },
+      {
+        "phase": "replay",
+        "grads": "b6db598c1043cf83dcaccac10d3dcebc56ae5c428a210312619f299cd96c9ce9",
+        "optimizer": "fadfa65d2626b64a65374d8cac44a5695b2a978393f0b059f0daede2d2b2f7a1",
+        "lr": [
+          0.0001
+        ],
+        "gradient_differences": [
+          {
+            "name": "transformer$$transformer_blocks$$0$$img_mod$$1.lora_up.weight",
+            "delta": 7.036363240331411e-05,
+            "baseline_max": 0.0018218416953459382,
+            "replay_max": 0.0018253268208354712
+          },
+          {
+            "name": "transformer$$transformer_blocks$$0$$txt_mod$$1.lora_up.weight",
+            "delta": 2.0592247892636806e-05,
+            "baseline_max": 0.001942899776622653,
+            "replay_max": 0.0019286515889689326
+          },
+          {
+            "name": "transformer$$transformer_blocks$$0$$attn$$to_k.lora_up.weight",
+            "delta": 7.589815140818246e-06,
+            "baseline_max": 0.0005186675698496401,
+            "replay_max": 0.0005201423773542047
+          },
+          {
+            "name": "transformer$$transformer_blocks$$0$$attn$$to_q.lora_up.weight",
+            "delta": 5.2263494580984116e-06,
+            "baseline_max": 0.0005240693571977317,
+            "replay_max": 0.0005188430077396333
+          },
+          {
+            "name": "transformer$$transformer_blocks$$0$$attn$$to_v.lora_up.weight",
+            "delta": 2.461689291521907e-06,
+            "baseline_max": 0.000347369525115937,
+            "replay_max": 0.0003457714046817273
+          },
+          {
+            "name": "transformer$$transformer_blocks$$1$$txt_mod$$1.lora_up.weight",
+            "delta": 2.2435524442698807e-06,
+            "baseline_max": 7.147494034143165e-05,
+            "replay_max": 7.069008279358968e-05
+          },
+          {
+            "name": "transformer$$transformer_blocks$$1$$img_mod$$1.lora_up.weight",
+            "delta": 1.260021235793829e-06,
+            "baseline_max": 8.17332329461351e-05,
+            "replay_max": 8.28138436190784e-05
+          },
+          {
+            "name": "transformer$$transformer_blocks$$0$$attn$$to_out$$0.lora_up.weight",
+            "delta": 1.2467135093174875e-06,
+            "baseline_max": 0.00021678941266145557,
+            "replay_max": 0.00021640209888573736
+          },
+          {
+            "name": "transformer$$transformer_blocks$$2$$txt_mod$$1.lora_up.weight",
+            "delta": 1.1709680620697327e-06,
+            "baseline_max": 1.9877794329659082e-05,
+            "replay_max": 2.005762144108303e-05
+          },
+          {
+            "name": "transformer$$transformer_blocks$$23$$img_mod$$1.lora_up.weight",
+            "delta": 1.056214387062937e-06,
+            "baseline_max": 2.849869997589849e-05,
+            "replay_max": 2.8778365958714858e-05
+          },
+          {
+            "name": "transformer$$transformer_blocks$$6$$txt_mod$$1.lora_up.weight",
+            "delta": 1.02571357274428e-06,
+            "baseline_max": 5.728465475840494e-05,
+            "replay_max": 5.625894118566066e-05
+          },
+          {
+            "name": "transformer$$transformer_blocks$$10$$txt_mod$$1.lora_up.weight",
+            "delta": 9.674695320427418e-07,
+            "baseline_max": 5.879960735910572e-05,
+            "replay_max": 5.976707689114846e-05
+          }
+        ],
+        "weights": "7f34acc4fe5a4849bc3568cda1594407647421e1ed80afd3979c0c7f83415bf7",
+        "optimizer_after": "7d4d6bcee6777648611a7d95b68e53d5c1444f702754f42f4ff672b55b4fd1aa"
+      }
+    ]
+  },
+  "math": {
+    "next_update_max_abs_delta": 0.0,
+    "next_update_rng_equal": true,
+    "loss_comparison": {
+      "baseline": {
+        "loss": 0.007845474407076836
+      },
+      "replay": {
+        "loss": 0.007845474407076836
+      }
+    },
+    "updates": [
+      {
+        "deterministic": true,
+        "flash": false,
+        "math": true,
+        "phase": "baseline",
+        "grads": "17685f5398c45b3862cadbfd8d4fa2dbd061b5564ecc0dd548598f2d99e95e9c",
+        "optimizer": "fadfa65d2626b64a65374d8cac44a5695b2a978393f0b059f0daede2d2b2f7a1",
+        "lr": [
+          0.0001
+        ],
+        "weights": "f6743235df4be3cb95c1113b468bfa2563feb58c972710c39213229273356827",
+        "optimizer_after": "b563f405a0134b275e351a519e574a91e87997384a9cfd89d2c5066a2e7dd652"
+      },
+      {
+        "deterministic": true,
+        "flash": false,
+        "math": true,
+        "phase": "replay",
+        "grads": "17685f5398c45b3862cadbfd8d4fa2dbd061b5564ecc0dd548598f2d99e95e9c",
+        "optimizer": "fadfa65d2626b64a65374d8cac44a5695b2a978393f0b059f0daede2d2b2f7a1",
+        "lr": [
+          0.0001
+        ],
+        "gradient_differences": [
+          {
+            "name": "transformer$$transformer_blocks$$0$$img_mod$$1.lora_down.weight",
+            "delta": 0.0,
+            "baseline_max": 0.0,
+            "replay_max": 0.0
+          },
+          {
+            "name": "transformer$$transformer_blocks$$0$$img_mod$$1.lora_up.weight",
+            "delta": 0.0,
+            "baseline_max": 0.001567615196108818,
+            "replay_max": 0.001567615196108818
+          },
+          {
+            "name": "transformer$$transformer_blocks$$0$$attn$$to_q.lora_down.weight",
+            "delta": 0.0,
+            "baseline_max": 0.0,
+            "replay_max": 0.0
+          },
+          {
+            "name": "transformer$$transformer_blocks$$0$$attn$$to_q.lora_up.weight",
+            "delta": 0.0,
+            "baseline_max": 0.0004795176791958511,
+            "replay_max": 0.0004795176791958511
+          },
+          {
+            "name": "transformer$$transformer_blocks$$0$$attn$$to_k.lora_down.weight",
+            "delta": 0.0,
+            "baseline_max": 0.0,
+            "replay_max": 0.0
+          },
+          {
+            "name": "transformer$$transformer_blocks$$0$$attn$$to_k.lora_up.weight",
+            "delta": 0.0,
+            "baseline_max": 0.0001386039366479963,
+            "replay_max": 0.0001386039366479963
+          },
+          {
+            "name": "transformer$$transformer_blocks$$0$$attn$$to_v.lora_down.weight",
+            "delta": 0.0,
+            "baseline_max": 0.0,
+            "replay_max": 0.0
+          },
+          {
+            "name": "transformer$$transformer_blocks$$0$$attn$$to_v.lora_up.weight",
+            "delta": 0.0,
+            "baseline_max": 0.00039139779983088374,
+            "replay_max": 0.00039139779983088374
+          },
+          {
+            "name": "transformer$$transformer_blocks$$0$$attn$$add_k_proj.lora_down.weight",
+            "delta": 0.0,
+            "baseline_max": 0.0,
+            "replay_max": 0.0
+          },
+          {
+            "name": "transformer$$transformer_blocks$$0$$attn$$add_k_proj.lora_up.weight",
+            "delta": 0.0,
+            "baseline_max": 7.586214633192867e-05,
+            "replay_max": 7.586214633192867e-05
+          },
+          {
+            "name": "transformer$$transformer_blocks$$0$$attn$$add_v_proj.lora_down.weight",
+            "delta": 0.0,
+            "baseline_max": 0.0,
+            "replay_max": 0.0
+          },
+          {
+            "name": "transformer$$transformer_blocks$$0$$attn$$add_v_proj.lora_up.weight",
+            "delta": 0.0,
+            "baseline_max": 2.445868267386686e-05,
+            "replay_max": 2.445868267386686e-05
+          }
+        ],
+        "weights": "f6743235df4be3cb95c1113b468bfa2563feb58c972710c39213229273356827",
+        "optimizer_after": "b563f405a0134b275e351a519e574a91e87997384a9cfd89d2c5066a2e7dd652"
+      }
+    ]
+  }
+}

@@ -251,6 +251,8 @@ class BucketsMixin:
                 self.batch_indices.append(batch)
 
     def shuffle_buckets(self: 'AiToolkitDataset'):
+        if self.dataset_config.deterministic_validation:
+            return
         for key, bucket in self.buckets.items():
             random.shuffle(bucket.file_list_idx)
 
@@ -1730,7 +1732,7 @@ class MaskFileItemDTOMixin:
 
         # randomly apply a blur up to 0.5% of the size of the min (width, height)
         min_size = min(img.width, img.height)
-        blur_radius = int(min_size * random.random() * 0.005)
+        blur_radius = 0 if self.dataset_config.deterministic_validation else int(min_size * random.random() * 0.005)
         img = img.filter(ImageFilter.GaussianBlur(radius=blur_radius))
 
         # make grayscale
@@ -2912,6 +2914,25 @@ class ControlCachingMixin:
 
     def setup_controls(self: 'AiToolkitDataset'):
         if not self.is_generating_controls:
+            return
+        if self.dataset_config.deterministic_validation:
+            from toolkit.validation import isolated_rng, isolated_modules, model_modules, stable_seed, content_hash, check_image
+            # Use the existing generator, but never unload or change the training
+            # model as a side effect. Each target/role has an independent stream.
+            with isolated_modules(model_modules(self.sd)):
+                generator = ControlGenerator(device=self.sd.device, sd=None)
+                try:
+                    for file_item in self.file_list:
+                        for role in file_item.dataset_config.controls:
+                            seed = stable_seed('prepare-v1', content_hash(file_item.path), role)
+                            with isolated_rng(seed):
+                                path = generator.get_control_path(file_item.path, role)
+                            if path is None:
+                                raise ValueError(f'Missing generated {role}: {file_item.path}')
+                            check_image(path)
+                            self.add_control_path_to_file_item(file_item, path, role)
+                finally:
+                    generator.cleanup()
             return
         with torch.no_grad():
             print_acc(f"Generating controls for {self.dataset_path}")

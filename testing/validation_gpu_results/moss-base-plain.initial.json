@@ -1,0 +1,352 @@
+{
+  "status": "passed",
+  "resume": false,
+  "validation": [
+    {
+      "step": 0,
+      "fixed_checks_digest": "6beeed79ef143ce46b5ae94cacd397c512a47b4d7003a5a7b8536c037854e33e",
+      "vae_encodes_during_validation": 0,
+      "val_loss_mean": 0.2574334079399705,
+      "val_loss_low_noise": 0.2738164607435465,
+      "val_loss_high_noise": 0.2410503551363945,
+      "repeat_max_abs_delta": 0.0
+    },
+    {
+      "step": 2,
+      "fixed_checks_digest": "6beeed79ef143ce46b5ae94cacd397c512a47b4d7003a5a7b8536c037854e33e",
+      "vae_encodes_during_validation": 0,
+      "val_loss_mean": 0.25739115942269564,
+      "val_loss_low_noise": 0.27376258932054043,
+      "val_loss_high_noise": 0.24101972952485085,
+      "repeat_max_abs_delta": 0.0
+    },
+    {
+      "step": 3,
+      "fixed_checks_digest": "6beeed79ef143ce46b5ae94cacd397c512a47b4d7003a5a7b8536c037854e33e",
+      "vae_encodes_during_validation": 0,
+      "val_loss_mean": 0.2567696631886065,
+      "val_loss_low_noise": 0.2736156368628144,
+      "val_loss_high_noise": 0.23992368951439857,
+      "repeat_max_abs_delta": 0.0
+    }
+  ],
+  "harness_sha256": "dba035b04643368319efd055cb09fa1b4b9794b57db54422dab4c376369d961f",
+  "loaded_model_dtypes": {
+    "transformer": {
+      "torch.bfloat16": 378
+    },
+    "vae": {
+      "torch.float32": 248
+    }
+  },
+  "loaded_text_encoder_dtypes": [
+    {
+      "torch.bfloat16": 426
+    }
+  ],
+  "quantization": {
+    "transformer": false,
+    "text_encoder": false
+  },
+  "input_digest": "0029251b36366d8b5736678670b441e71956445e4d652562f36457c321da6cee",
+  "manifest": {
+    "version": 2,
+    "noise_version": 1,
+    "model": {
+      "arch": "moss_image",
+      "model": {
+        "repository": "OpenMOSS-Team/MOSS-Image-Base"
+      },
+      "extras": {
+        "repository": "OpenMOSS-Team/MOSS-Image-Base"
+      },
+      "kwargs": {
+        "edit": false
+      },
+      "latent_space": "moss_image",
+      "text_space": "moss_image",
+      "dtypes": {
+        "torch_dtype": "torch.bfloat16",
+        "vae_torch_dtype": "torch.float32",
+        "te_torch_dtype": "torch.bfloat16"
+      },
+      "torch": "2.8.0+cu128",
+      "numpy": "1.26.4",
+      "bucket_divisibility": 16
+    },
+    "records": [
+      {
+        "target": "be7964b11c0b8c428679bdf444e1ce686c287acd885b273041b4a95a92dc293e",
+        "caption": "4lf4_Ki8_M style. A two-layer round platform is in the center. A volumetric \"%\" sign is slightly shifted to the upper left corner on the platform. A red banknote with the \"₽\" symbol is in the lower right corner above the platform. A black banknote is located below, underneath the red banknote.",
+        "caption_hash": "eb4834ddfe52e915250db92e63d34745388bc3ff5f3c2a33b37704d3d8260cdd",
+        "prepared_caption": "4lf4_Ki8_M style. A two-layer round platform is in the center. A volumetric \"%\" sign is slightly shifted to the upper left corner on the platform. A red banknote with the \"₽\" symbol is in the lower right corner above the platform. A black banknote is located below, underneath the red banknote.",
+        "controls": [],
+        "mask": null,
+        "generated": [],
+        "settings": {
+          "batch_size": null,
+          "deterministic_validation": true,
+          "type": "image",
+          "default_caption": "",
+          "trigger_word": null,
+          "diff_output_preservation": false,
+          "diff_output_preservation_class": "",
+          "random_triggers": [],
+          "random_triggers_max": 1,
+          "caption_ext": ".txt",
+          "random_scale": false,
+          "random_crop": false,
+          "resolution": 256,
+          "scale": 1.0,
+          "buckets": true,
+          "bucket_tolerance": 64,
+          "is_reg": false,
+          "prior_reg": false,
+          "network_weight": 1.0,
+          "token_dropout_rate": 0.0,
+          "shuffle_tokens": false,
+          "caption_dropout_rate": 0.0,
+          "keep_tokens": 0,
+          "flip_x": false,
+          "flip_y": false,
+          "augments": [],
+          "control_from_same_folder": false,
+          "num_controls_from_same_folder": 1,
+          "control_transparent_color": [
+            0,
+            0,
+            0
+          ],
+          "full_size_control_images": true,
+          "alpha_mask": false,
+          "invert_mask": false,
+          "mask_min_value": 0.0,
+          "poi": null,
+          "use_short_captions": false,
+          "num_repeats": 1,
+          "cache_latents": false,
+          "cache_latents_to_disk": false,
+          "cache_tensors_to_disk": false,
+          "cache_clip_vision_to_disk": false,
+          "cache_text_embeddings": false,
+          "load_image_when_caching_latents": false,
+          "standardize_images": false,
+          "augmentations": null,
+          "shuffle_augmentations": false,
+          "caption_type": ".txt",
+          "guidance_type": "targeted",
+          "clip_image_from_same_folder": false,
+          "clip_image_augmentations": null,
+          "clip_image_shuffle_augmentations": false,
+          "replacements": [],
+          "loss_multiplier": 1.0,
+          "num_workers": 2,
+          "prefetch_factor": 2,
+          "pin_memory": false,
+          "batch_load_threads": 8,
+          "cache_latents_num_workers": 6,
+          "extra_values": [],
+          "square_crop": false,
+          "replay_transforms": true,
+          "num_frames": 1,
+          "shrink_video_to_frames": true,
+          "fps": 24,
+          "auto_frame_count": false,
+          "trim_auto_frame_count_tail": true,
+          "debug": false,
+          "controls": [],
+          "fast_image_size": false,
+          "do_i2v": false,
+          "do_audio": false,
+          "audio_preserve_pitch": false,
+          "audio_normalize": false
+        }
+      },
+      {
+        "target": "be7964b11c0b8c428679bdf444e1ce686c287acd885b273041b4a95a92dc293e",
+        "caption": "4lf4_Ki8_M style. A two-layer round platform is in the center. A volumetric \"%\" sign is slightly shifted to the upper left corner on the platform. A red banknote with the \"₽\" symbol is in the lower right corner above the platform. A black banknote is located below, underneath the red banknote.",
+        "caption_hash": "eb4834ddfe52e915250db92e63d34745388bc3ff5f3c2a33b37704d3d8260cdd",
+        "prepared_caption": "4lf4_Ki8_M style. A two-layer round platform is in the center. A volumetric \"%\" sign is slightly shifted to the upper left corner on the platform. A red banknote with the \"₽\" symbol is in the lower right corner above the platform. A black banknote is located below, underneath the red banknote.",
+        "controls": [],
+        "mask": "ae0bf099bdf2385f6e9637c8a56c6bc244d5c6650d7bc1844092fd7f00b959a7",
+        "generated": [],
+        "settings": {
+          "batch_size": null,
+          "deterministic_validation": true,
+          "type": "image",
+          "default_caption": "",
+          "trigger_word": null,
+          "diff_output_preservation": false,
+          "diff_output_preservation_class": "",
+          "random_triggers": [],
+          "random_triggers_max": 1,
+          "caption_ext": ".txt",
+          "random_scale": false,
+          "random_crop": false,
+          "resolution": 256,
+          "scale": 1.0,
+          "buckets": true,
+          "bucket_tolerance": 64,
+          "is_reg": false,
+          "prior_reg": false,
+          "network_weight": 1.0,
+          "token_dropout_rate": 0.0,
+          "shuffle_tokens": false,
+          "caption_dropout_rate": 0.0,
+          "keep_tokens": 0,
+          "flip_x": false,
+          "flip_y": false,
+          "augments": [],
+          "control_from_same_folder": false,
+          "num_controls_from_same_folder": 1,
+          "control_transparent_color": [
+            0,
+            0,
+            0
+          ],
+          "full_size_control_images": true,
+          "alpha_mask": false,
+          "invert_mask": false,
+          "mask_min_value": 0.0,
+          "poi": null,
+          "use_short_captions": false,
+          "num_repeats": 1,
+          "cache_latents": false,
+          "cache_latents_to_disk": false,
+          "cache_tensors_to_disk": false,
+          "cache_clip_vision_to_disk": false,
+          "cache_text_embeddings": false,
+          "load_image_when_caching_latents": false,
+          "standardize_images": false,
+          "augmentations": null,
+          "shuffle_augmentations": false,
+          "caption_type": ".txt",
+          "guidance_type": "targeted",
+          "clip_image_from_same_folder": false,
+          "clip_image_augmentations": null,
+          "clip_image_shuffle_augmentations": false,
+          "replacements": [],
+          "loss_multiplier": 1.0,
+          "num_workers": 2,
+          "prefetch_factor": 2,
+          "pin_memory": false,
+          "batch_load_threads": 8,
+          "cache_latents_num_workers": 6,
+          "extra_values": [],
+          "square_crop": false,
+          "replay_transforms": true,
+          "num_frames": 1,
+          "shrink_video_to_frames": true,
+          "fps": 24,
+          "auto_frame_count": false,
+          "trim_auto_frame_count_tail": true,
+          "debug": false,
+          "controls": [],
+          "fast_image_size": false,
+          "do_i2v": false,
+          "do_audio": false,
+          "audio_preserve_pitch": false,
+          "audio_normalize": false
+        }
+      }
+    ],
+    "hash": "82ba06a18bdddaabaaf6dc46fb1791cda131b68fbc04939e24024ee5f573ec5f"
+  },
+  "model_dtypes": {
+    "transformer": {
+      "torch.bfloat16": 378
+    },
+    "vae": {
+      "torch.float32": 248
+    }
+  },
+  "text_encoder_dtypes": [
+    {
+      "torch.float32": 1
+    }
+  ],
+  "gpu": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+  "peak_allocated_bytes": 27049984512,
+  "environment": {
+    "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+    "torch": "2.8.0+cu128",
+    "cuda": "12.8",
+    "diffusers": "0.39.0.dev0",
+    "transformers": "5.5.3",
+    "accelerate": "1.15.0",
+    "cpu_threads": 8
+  },
+  "last_check_failure_published_nothing": true,
+  "input_mismatch_published_nothing": true,
+  "sample_weights_verified_at_steps": [
+    0,
+    2,
+    3
+  ],
+  "pending_gradients_at_update": 0,
+  "next_update_attention_backend": "torch SDPA math",
+  "next_update_max_abs_delta": 0.0,
+  "next_update_rng_equal": true,
+  "tensorboard": {
+    "val_loss_mean": [
+      {
+        "step": 0,
+        "value": 0.2574334144592285
+      },
+      {
+        "step": 2,
+        "value": 0.25739115476608276
+      },
+      {
+        "step": 3,
+        "value": 0.25676965713500977
+      }
+    ],
+    "val_loss_low_noise": [
+      {
+        "step": 0,
+        "value": 0.27381646633148193
+      },
+      {
+        "step": 2,
+        "value": 0.273762583732605
+      },
+      {
+        "step": 3,
+        "value": 0.27361562848091125
+      }
+    ],
+    "val_loss_high_noise": [
+      {
+        "step": 0,
+        "value": 0.2410503625869751
+      },
+      {
+        "step": 2,
+        "value": 0.24101972579956055
+      },
+      {
+        "step": 3,
+        "value": 0.23992368578910828
+      }
+    ]
+  },
+  "checkpoints": [
+    {
+      "step": 2,
+      "dtypes": [
+        "torch.float32"
+      ],
+      "optimizer": "adamw8bit",
+      "samples": 1
+    },
+    {
+      "step": 3,
+      "dtypes": [
+        "torch.float32"
+      ],
+      "optimizer": "adamw8bit",
+      "samples": 1
+    }
+  ]
+}

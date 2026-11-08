@@ -575,6 +575,8 @@ class AiToolkitDataset(LatentCachingMixin, ControlCachingMixin, CLIPCachingMixin
                 )
                 source_items.append(file_item)
             except Exception as e:
+                if dataset_config.deterministic_validation:
+                    raise ValueError(f'Invalid validation input: {file}') from e
                 print_acc(traceback.format_exc())
                 if self.is_video:
                     print_acc(f"Error processing video: {file}")
@@ -628,6 +630,13 @@ class AiToolkitDataset(LatentCachingMixin, ControlCachingMixin, CLIPCachingMixin
         self.file_list.extend(source_items)
 
     def setup_epoch(self):
+        if self.dataset_config.deterministic_validation:
+            if self.dataset_config.buckets:
+                self.setup_buckets()
+            if self.is_generating_controls:
+                self.setup_controls()
+            self.epoch_num += 1
+            return
         if self.epoch_num == 0:
             # initial setup
             # do not call for now
@@ -675,6 +684,8 @@ class AiToolkitDataset(LatentCachingMixin, ControlCachingMixin, CLIPCachingMixin
         try:
             file_item.load_and_process_image(file_item.dataloader_transforms or self.transform)
         except Exception as e:
+            if file_item.dataset_config.deterministic_validation:
+                raise ValueError(f'Invalid validation input: {file_item.path}') from e
             print(f"Error loading image, skipping and loading a different one: {file_item.path} ({e})")
             if _attempts >= 10:
                 # avoid infinite recursion if many files are corrupt

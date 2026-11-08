@@ -53,7 +53,7 @@ class SDTrainer(BaseSDTrainProcess):
 
     def __init__(self, process_id: int, job, config: OrderedDict, **kwargs):
         super().__init__(process_id, job, config, **kwargs)
-        self.assistant_adapter: Union['T2IAdapter', 'ControlNetModel', None]
+        self.assistant_adapter: Union['T2IAdapter', 'ControlNetModel', None] = None
         self.do_prior_prediction = False
         self.do_long_prompts = False
         self.do_guided_loss = False
@@ -551,6 +551,7 @@ class SDTrainer(BaseSDTrainProcess):
             batch: 'DataLoaderBatchDTO',
             mask_multiplier: Union[torch.Tensor, float] = 1.0,
             prior_pred: Union[torch.Tensor, None] = None,
+            validation=False,
             **kwargs
     ):
         loss_target = self.train_config.loss_target
@@ -983,6 +984,7 @@ class SDTrainer(BaseSDTrainProcess):
                     v2=self.train_config.linear_timesteps2,
                     timestep_type=self.train_config.timestep_type,
                     x0_pred=self.sd.x0_pred,
+                    **({'interpolate': True} if validation else {}),
                 ).to(loss.device, dtype=loss.dtype)
                 if len(loss.shape) == 4:
                     timestep_weight = timestep_weight.view(-1, 1, 1, 1).detach()
@@ -1010,6 +1012,11 @@ class SDTrainer(BaseSDTrainProcess):
             mask_multiplier = torch.nn.functional.interpolate(mask_multiplier, size=(pred.shape[2], pred.shape[3]), mode='nearest')
 
         # multiply by our mask
+        if (validation or self.uses_dataset_split) and self.train_config.loss_type == 'wavelet' and batch.mask_tensor is not None:
+            # Wavelet loss has four frequency bands and half the spatial size.
+            # Apply the same normalized spatial mask to every band.
+            from toolkit.validation import mask_multiplier as prepare_mask_multiplier
+            mask_multiplier = prepare_mask_multiplier(batch, loss, self.sd.do_masked_loss)
         try:
             if len(noise_pred.shape) == 5:
                 # video B,C,T,H,W
@@ -1018,6 +1025,8 @@ class SDTrainer(BaseSDTrainProcess):
             loss = loss * mask_multiplier
         except Exception as e:
             # todo handle mask with video models
+            if validation:
+                raise ValueError('Validation mask cannot be applied to the configured loss') from e
             print("Could not apply mask multiplier to loss")
             print(e)
             pass
@@ -1051,8 +1060,10 @@ class SDTrainer(BaseSDTrainProcess):
         # multiply by our mask
         try:
             loss = loss * loss_multiplier
-        except:
+        except Exception:
             # todo handle mask with video models
+            if validation:
+                raise
             pass
         if prior_loss is not None:
             loss = loss + prior_loss
@@ -1060,14 +1071,14 @@ class SDTrainer(BaseSDTrainProcess):
         if not self.train_config.train_turbo:
             if self.train_config.learnable_snr_gos:
                 # add snr_gamma
-                loss = apply_learnable_snr_gos(loss, timesteps, self.snr_gos)
+                loss = apply_learnable_snr_gos(loss, timesteps, self.snr_gos, read_only=validation)
             elif self.train_config.snr_gamma is not None and self.train_config.snr_gamma > 0.000001 and not ignore_snr:
                 # add snr_gamma
                 loss = apply_snr_weight(loss, timesteps, self.sd.noise_scheduler, self.train_config.snr_gamma,
-                                        fixed=True)
+                                        fixed=True, interpolate=validation)
             elif self.train_config.min_snr_gamma is not None and self.train_config.min_snr_gamma > 0.000001 and not ignore_snr:
                 # add min_snr_gamma
-                loss = apply_snr_weight(loss, timesteps, self.sd.noise_scheduler, self.train_config.min_snr_gamma)
+                loss = apply_snr_weight(loss, timesteps, self.sd.noise_scheduler, self.train_config.min_snr_gamma, interpolate=validation)
 
         loss = loss.mean()
         
@@ -1083,7 +1094,8 @@ class SDTrainer(BaseSDTrainProcess):
         if self.adapter is not None and hasattr(self.adapter, "additional_loss") and self.adapter.additional_loss is not None:
 
             loss = loss + self.adapter.additional_loss.mean()
-            self.adapter.additional_loss = None
+            if not validation:
+                self.adapter.additional_loss = None
 
         if self.train_config.target_norm_std:
             # seperate out the batch and channels
@@ -1108,6 +1120,8 @@ class SDTrainer(BaseSDTrainProcess):
                 print_acc(f"timesteps: {timesteps}")
 
         if self.train_config.max_loss is not None:
+            if validation and not torch.isfinite(loss).all():
+                raise ValueError('Non-finite validation loss before clipping')
             loss = torch.clamp(loss, max=self.train_config.max_loss)
         
         return loss
@@ -1438,6 +1452,14 @@ class SDTrainer(BaseSDTrainProcess):
         )
     
 
+    def validation_loss(self, batch, noisy_latents, noise, timesteps, embeds):
+        from toolkit.validation import mask_multiplier
+        prediction = self.predict_noise(noisy_latents=noisy_latents, timesteps=timesteps,
+                                        conditional_embeds=embeds, batch=batch, is_primary_pred=True)
+        return self.calculate_loss(prediction, noise, noisy_latents, timesteps, batch,
+                                   mask_multiplier=mask_multiplier(batch, noisy_latents, self.sd.do_masked_loss),
+                                   validation=True)
+
     def train_llm_accumulation(self, batch: DataLoaderBatchDTO, accum_scale: float = 1.0):
         """Text-generating models (BaseModel.is_llm): no noise, scheduler, VAE or prompt
         encoding. The model computes its own loss from the batch (cached media + captions)
@@ -1569,27 +1591,8 @@ class SDTrainer(BaseSDTrainProcess):
                     if batch.clip_image_tensor is not None:
                         clip_images = batch.clip_image_tensor.to(self.device_torch, dtype=dtype).detach()
 
-            mask_multiplier = torch.ones((noisy_latents.shape[0], 1, 1, 1), device=self.device_torch, dtype=dtype)
-            if batch.mask_tensor is not None and self.sd.do_masked_loss:
-                with self.timer('get_mask_multiplier'):
-                    # upsampling no supported for bfloat16
-                    mask_multiplier = batch.mask_tensor.to(self.device_torch, dtype=torch.float16).detach()
-                    # scale down to the size of the latents, mask multiplier shape(bs, 1, width, height), noisy_latents shape(bs, channels, width, height)
-                    if len(noisy_latents.shape) == 5:
-                        # video B,C,T,H,W
-                        h = noisy_latents.shape[3]
-                        w = noisy_latents.shape[4]
-                    else:
-                        h = noisy_latents.shape[2]
-                        w = noisy_latents.shape[3]
-                    mask_multiplier = torch.nn.functional.interpolate(
-                        mask_multiplier, size=(h, w)
-                    )
-                    # expand to match latents
-                    mask_multiplier = mask_multiplier.expand(-1, noisy_latents.shape[1], -1, -1)
-                    mask_multiplier = mask_multiplier.to(self.device_torch, dtype=dtype).detach()
-                    # make avg 1.0
-                    mask_multiplier = mask_multiplier / mask_multiplier.mean()
+            from toolkit.validation import mask_multiplier as prepare_mask_multiplier
+            mask_multiplier = prepare_mask_multiplier(batch, noisy_latents, self.sd.do_masked_loss)
 
         def get_adapter_multiplier():
             if self.adapter and isinstance(self.adapter, T2IAdapter):
@@ -2347,7 +2350,11 @@ class SDTrainer(BaseSDTrainProcess):
         else:
             batch_list = [batch]
         total_loss = None
-        self.optimizer.zero_grad()
+        self._did_optimizer_step = False
+        if not self.uses_dataset_split or not self._accumulation_pending:
+            self.optimizer.zero_grad()
+        if self.uses_dataset_split:
+            self._accumulation_pending = True
         # micro-batches per optimizer step: a batch list (gradient_accumulation) or repeated
         # calls (gradient_accumulation_steps). -1 (whole epoch) has no fixed count; left summed.
         n_accum = len(batch_list)
@@ -2391,11 +2398,17 @@ class SDTrainer(BaseSDTrainProcess):
             # only step if we are not accumulating
             with self.timer('optimizer_step'):
                 self.optimizer.step()
+                self._did_optimizer_step = self.accelerator.sync_gradients and not self.accelerator.optimizer_step_was_skipped
+                if self.uses_dataset_split:
+                    self._accumulation_pending = False
+                    if self._did_optimizer_step:
+                        self.completed_optimizer_steps += 1
+                        self.step_num = self.completed_optimizer_steps
 
                 self.optimizer.zero_grad(set_to_none=True)
                 if self.adapter and isinstance(self.adapter, CustomAdapter):
                     self.adapter.post_weight_update()
-            if self.ema is not None:
+            if self.ema is not None and (not self.uses_dataset_split or self._did_optimizer_step):
                 with self.timer('ema_update'):
                     self.ema.update()
         else:
@@ -2404,7 +2417,8 @@ class SDTrainer(BaseSDTrainProcess):
 
         # TODO Should we only step scheduler on grad step? If so, need to recalculate last step
         with self.timer('scheduler_step'):
-            self.lr_scheduler.step()
+            if not self.uses_dataset_split or self._did_optimizer_step:
+                self.lr_scheduler.step()
 
         if self.embedding is not None:
             with self.timer('restore_embeddings'):

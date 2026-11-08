@@ -2,6 +2,7 @@ import os
 import time
 from typing import List, Optional, Literal, Tuple, Union, TYPE_CHECKING, Dict
 import random
+import copy
 
 import torch
 import torchaudio
@@ -338,6 +339,101 @@ class AdapterConfig:
         # for i2v adapter
         # append the masked start frame. During pretraining we will only do the vision encoder
         self.i2v_do_start_frame: bool = kwargs.get('i2v_do_start_frame', False)
+
+
+class DeterministicValidationConfig:
+    """Independent validation inputs; never inherit training dataset options."""
+
+    def __init__(self, datasets):
+        defaults = dict(val_every_n_steps=10, val_seed_noise=42,
+                        val_level_noise_n=10, val_seed_noise_n=2)
+        for name, default in defaults.items():
+            values = [item.get(name, default) for item in datasets]
+            for value in values:
+                if type(value) is not int:
+                    raise ValueError(f'{name} must be an integer, not {value!r}')
+                if name != 'val_seed_noise' and value < 1:
+                    raise ValueError(f'{name} must be >= 1')
+                if name == 'val_level_noise_n' and (value < 2 or value % 2):
+                    raise ValueError(f'{name} must be even and >= 2')
+            if any(value != values[0] for value in values):
+                raise ValueError(f'{name} must match across all val_datasets')
+            setattr(self, name, values[0])
+        self.datasets = [DatasetConfig(**item) for item in preprocess_dataset_raw_config(datasets)]
+
+
+def normalize_dataset_configs(process_config):
+    """Return train inputs, optional val config and the new-interface flag.
+
+    Work on copies: resolution expansion and subsequent train-only overrides
+    must not mutate the source configuration or leak into validation.
+    """
+    new_mode = 'train_datasets' in process_config or 'val_datasets' in process_config
+    if 'train_datasets' in process_config and 'datasets' in process_config:
+        raise ValueError('datasets conflicts with train_datasets')
+    if 'val_datasets' in process_config and 'validation_config' in (process_config.get('train') or {}):
+        raise ValueError('val_datasets conflicts with train.validation_config')
+
+    def normalize_paths(datasets, field, alias):
+        if not isinstance(datasets, list) or not datasets:
+            raise ValueError(f'{field} must be a non-empty list')
+        for item in datasets:
+            if not isinstance(item, dict):
+                raise ValueError(f'{field} entries must be mappings')
+            keys = [key for key in (alias, 'folder_path', 'dataset_path') if key in item]
+            if len(keys) != 1:
+                raise ValueError(f'{field}: provide exactly one of {alias}, folder_path, dataset_path')
+            paths = item[keys[0]]
+            paths = paths if isinstance(paths, (list, tuple)) else [paths]
+            if not paths or any(not isinstance(path, str) or not path.strip() for path in paths):
+                raise ValueError(f'{field}.{keys[0]} must contain non-empty paths')
+            if alias in item:
+                item['folder_path'] = item.pop(alias)
+
+    train = copy.deepcopy(process_config.get('train_datasets', process_config.get('datasets')))
+    if 'train_datasets' in process_config:
+        normalize_paths(train, 'train_datasets', 'train_path')
+    val = None
+    if 'val_datasets' in process_config:
+        datasets = copy.deepcopy(process_config['val_datasets'])
+        normalize_paths(datasets, 'val_datasets', 'val_path')
+        for item in datasets:
+            disabled = ('random_crop', 'random_scale', 'flip_x', 'flip_y',
+                        'shuffle_tokens', 'shuffle_augmentations', 'caption_dropout_rate',
+                        'token_dropout_rate', 'augments', 'augmentations', 'random_triggers',
+                        'control_from_same_folder', 'clip_image_from_same_folder',
+                        'clip_image_augmentations', 'clip_image_shuffle_augmentations')
+            for key in disabled:
+                if item.get(key):
+                    raise ValueError(f'val_datasets.{key} must be disabled for deterministic validation')
+            if item.get('num_repeats', 1) != 1:
+                raise ValueError('val_datasets.num_repeats must be 1')
+            item.setdefault('default_caption', '')
+            item.setdefault('caption_ext', 'txt')
+            item['deterministic_validation'] = True
+        val = DeterministicValidationConfig(datasets)
+    return train, val, new_mode
+
+
+def validate_validation_model(model_config, datasets):
+    """Validate actual wrapper capabilities, including local model weights."""
+    arch = model_config.arch
+    if arch not in ('qwen_image', 'qwen_image_2', 'qwen_image_edit_plus', 'moss_image'):
+        raise ValueError(f'Deterministic validation does not support model arch {arch!r}')
+    native_controls = arch in ('qwen_image_2', 'qwen_image_edit_plus') or (
+        arch == 'moss_image' and model_config.model_kwargs.get('edit', False))
+    for dataset in datasets:
+        controls = [c for c in dataset.controls if c not in ('mask', 'sapiens2_mask')]
+        if arch == 'qwen_image_edit_plus' and not (dataset.control_path or dataset.control_from_same_folder or controls):
+            raise ValueError(f'{arch}: at least one control image is required for each train/val dataset')
+        if (dataset.control_path or dataset.control_from_same_folder or controls or dataset.inpaint_path) and not native_controls:
+            raise ValueError(f'{arch}: control inputs are not supported in this model mode')
+        if dataset.inpaint_path or 'inpaint' in controls:
+            raise ValueError(f'{arch}: native inpaint inputs are not supported')
+        if dataset.clip_image_path or dataset.unconditional_path:
+            raise ValueError(f'{arch}: clip/unconditional image inputs are not supported')
+        if dataset.num_frames != 1 or dataset.auto_frame_count:
+            raise ValueError(f'{arch}: validation requires single images')
 
 
 class ValidationItem:
@@ -925,6 +1021,7 @@ class DatasetConfig:
 
     def __init__(self, **kwargs):
         self.batch_size: Union[int, None] = kwargs.get('batch_size', None)
+        self.deterministic_validation: bool = kwargs.get('deterministic_validation', False)
         self.type = kwargs.get('type', 'image')  # sd, slider, reference
         # will be legacy
         self.folder_path: str = kwargs.get('folder_path', None)

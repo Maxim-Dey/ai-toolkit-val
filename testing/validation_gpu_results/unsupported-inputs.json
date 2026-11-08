@@ -1,0 +1,32 @@
+[
+  {
+    "case": "qwen-image",
+    "status": "expected rejection",
+    "error": "qwen_image: control inputs are not supported in this model mode"
+  },
+  {
+    "case": "qwen-image-2512",
+    "status": "expected rejection",
+    "error": "qwen_image: control inputs are not supported in this model mode"
+  },
+  {
+    "case": "moss-sft-plain",
+    "status": "expected rejection",
+    "error": "moss_image: control inputs are not supported in this model mode"
+  },
+  {
+    "case": "moss-base-plain",
+    "status": "expected rejection",
+    "error": "moss_image: control inputs are not supported in this model mode"
+  },
+  {
+    "case": "edit-2511-missing",
+    "status": "expected rejection",
+    "error": "qwen_image_edit_plus: at least one control image is required for each train/val dataset"
+  },
+  {
+    "case": "edit-2511-mask-only",
+    "status": "expected rejection",
+    "error": "qwen_image_edit_plus: at least one control image is required for each train/val dataset"
+  }
+]

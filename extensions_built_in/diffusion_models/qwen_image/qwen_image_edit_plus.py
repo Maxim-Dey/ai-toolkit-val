@@ -248,6 +248,44 @@ class QwenImageEditPlusModel(QwenImageModel):
         pe.attention_mask = torch.cat(prompt_embeds_mask_list, dim=0)
         return pe
 
+    def _encode_control_image(self, control_img, target_pixels):
+        """Use the same resize, VAE and token packing for training and validation."""
+        if self.vae.device != self.device_torch:
+            self.vae.to(self.device_torch)
+        control_img = control_img.to(self.device_torch, dtype=self.torch_dtype)
+        if control_img.ndim == 3:
+            control_img = control_img.unsqueeze(0)
+        ratio = control_img.shape[2] / control_img.shape[3]
+        height = math.sqrt(target_pixels * ratio)
+        width = height / ratio
+        height, width = round(height / 32) * 32, round(width / 32) * 32
+        control_img = F.interpolate(control_img, size=(height, width), mode="bilinear")
+        latent = self.encode_images(control_img * 2 - 1, device=self.device_torch, dtype=self.torch_dtype)
+        _, channels, height, width = latent.shape
+        packed = latent.view(1, channels, height // 2, 2, width // 2, 2)
+        packed = packed.permute(0, 2, 4, 1, 3, 5).reshape(1, (height // 2) * (width // 2), channels * 4)
+        return packed, (1, height // 2, width // 2)
+
+    def prepare_validation_conditions(self, batch, seed):
+        from toolkit.validation import isolated_rng, stable_seed
+        controls = batch.control_tensor_list
+        if controls is None and batch.control_tensor is not None:
+            controls = [[batch.control_tensor[0]]]
+        if not controls or len(controls) != 1 or not controls[0]:
+            raise ValueError("Qwen-Image-Edit validation requires one sample with at least one control image")
+        target_pixels = VAE_IMAGE_SIZE
+        if self.model_config.model_kwargs.get("match_target_res", False):
+            target_pixels = batch.latents.shape[-2] * batch.latents.shape[-1] * self.pipeline.vae_scale_factor ** 2
+        latents, shapes = [], []
+        with torch.no_grad():
+            for index, image in enumerate(controls[0]):
+                with isolated_rng(stable_seed(seed, 'control', index)):
+                    latent, shape = self._encode_control_image(image, target_pixels)
+                latents.append(latent.cpu())
+                shapes.append(shape)
+        batch.fixed_condition_latents = torch.cat(latents, dim=1)
+        batch.fixed_condition_metadata = shapes
+
     def get_noise_prediction(
         self,
         latent_model_input: torch.Tensor,
@@ -258,9 +296,6 @@ class QwenImageEditPlusModel(QwenImageModel):
     ):
         with torch.no_grad():
             batch_size, num_channels_latents, height, width = latent_model_input.shape
-            if self.vae.device != self.device_torch:
-                self.vae.to(self.device_torch)
-            
             control_image_res = VAE_IMAGE_SIZE
             if self.model_config.model_kwargs.get("match_target_res", False):
                 # use the current target size to set the control image res
@@ -296,60 +331,20 @@ class QwenImageEditPlusModel(QwenImageModel):
                 for b in range(batch_size):
                     batch_control_tensor_list.append(batch.control_tensor[b : b + 1])
 
-            if batch_control_tensor_list is not None:
+            if batch.fixed_condition_latents is not None:
+                condition_latents = batch.fixed_condition_latents.to(latent_model_input)
+                latent_model_input = torch.cat([latent_model_input, condition_latents], dim=1)
+                for shapes in img_shapes:
+                    shapes.extend(batch.fixed_condition_metadata)
+            elif batch_control_tensor_list is not None:
                 b = 0
                 for control_tensor_list in batch_control_tensor_list:
                     # control tensor list is a list of tensors for this batch item
                     controls = []
                     # pack control
                     for control_img in control_tensor_list:
-                        # control images are 0 - 1 scale, shape (1, ch, height, width)
-                        control_img = control_img.to(
-                            self.device_torch, dtype=self.torch_dtype
-                        )
-                        # if it is only 3 dim, add batch dim
-                        if len(control_img.shape) == 3:
-                            control_img = control_img.unsqueeze(0)
-                        ratio = control_img.shape[2] / control_img.shape[3]
-                        c_height = math.sqrt(control_image_res * ratio)
-                        c_width = c_height / ratio
-
-                        c_width = round(c_width / 32) * 32
-                        c_height = round(c_height / 32) * 32
-
-                        control_img = F.interpolate(
-                            control_img, size=(c_height, c_width), mode="bilinear"
-                        )
-
-                        # scale to -1 to 1
-                        control_img = control_img * 2 - 1
-
-                        control_latent = self.encode_images(
-                            control_img,
-                            device=self.device_torch,
-                            dtype=self.torch_dtype,
-                        )
-
-                        clb, cl_num_channels_latents, cl_height, cl_width = (
-                            control_latent.shape
-                        )
-
-                        control = control_latent.view(
-                            1,
-                            cl_num_channels_latents,
-                            cl_height // 2,
-                            2,
-                            cl_width // 2,
-                            2,
-                        )
-                        control = control.permute(0, 2, 4, 1, 3, 5)
-                        control = control.reshape(
-                            1,
-                            (cl_height // 2) * (cl_width // 2),
-                            num_channels_latents * 4,
-                        )
-
-                        img_shapes[b].append((1, cl_height // 2, cl_width // 2))
+                        control, shape = self._encode_control_image(control_img, control_image_res)
+                        img_shapes[b].append(shape)
                         controls.append(control)
 
                     # stack controls on dim 1

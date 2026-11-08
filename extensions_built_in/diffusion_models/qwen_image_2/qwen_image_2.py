@@ -340,8 +340,8 @@ class QwenImage2Model(BaseModel):
         self.vae.eval()
 
         images = torch.stack(
-            [image.to(device, dtype=dtype) for image in image_list]
-        ).to(device, dtype=dtype)
+            [image.to(device, dtype=self.vae.dtype) for image in image_list]
+        )
         if images.shape[1] == 3:
             # opaque alpha, in the [-1, 1] the VAE reads
             images = torch.cat([images, torch.ones_like(images[:, :1])], dim=1)
@@ -365,7 +365,7 @@ class QwenImage2Model(BaseModel):
         if self.vae.device == torch.device("cpu"):
             self.vae.to(device)
 
-        latents = latents.to(device, dtype=dtype).unsqueeze(2)
+        latents = latents.to(device, dtype=self.vae.dtype).unsqueeze(2)
         mean, std = self._latent_stats(latents.device, latents.dtype)
         latents = latents * std + mean
 
@@ -569,6 +569,22 @@ class QwenImage2Model(BaseModel):
         # reference latents join the sequence in get_noise_prediction, clean
         return latents.detach()
 
+    def prepare_validation_conditions(self, batch, seed):
+        from toolkit.validation import isolated_rng, stable_seed
+        controls = batch.control_tensor_list if batch.control_tensor_list is not None else batch.control_tensor
+        samples = self._prepare_control_images(
+            self._normalize_control_images(controls, 1),
+            target_pixels=self._target_pixels((batch.tensor.shape[-1], batch.tensor.shape[-2])),
+        )
+        latents, shapes = [], []
+        for index, image in enumerate(samples[0]):
+            with isolated_rng(stable_seed(seed, 'control', index)):
+                latent, shape = self.encode_condition_images([[image]])
+            latents.append(latent.cpu())
+            shapes.extend(shape)
+        batch.fixed_condition_latents = torch.cat(latents, dim=1) if latents else None
+        batch.fixed_condition_metadata = shapes
+
     def get_noise_prediction(
         self,
         latent_model_input: torch.Tensor,  # (B, 64, h, w)
@@ -587,7 +603,10 @@ class QwenImage2Model(BaseModel):
         # into, so a prompt encoded without them (a plain T2I dataset, a fully
         # dropped caption) takes no references here either.
         condition_latents, condition_shapes = None, []
-        if batch is not None and bool(slot_mask.any()):
+        if batch is not None and bool(slot_mask.any()) and batch.fixed_condition_latents is not None:
+            condition_latents = batch.fixed_condition_latents.to(self.device_torch, self.torch_dtype)
+            condition_shapes = batch.fixed_condition_metadata
+        elif batch is not None and bool(slot_mask.any()):
             with torch.no_grad():
                 control = batch.control_tensor_list
                 if control is None:

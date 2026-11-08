@@ -1,0 +1,47 @@
+{
+  "status": "passed",
+  "removed": [
+    "/ai-toolkit/models/diffusion_models/moss_image_base_bf16.safetensors",
+    "/ai-toolkit/models/diffusion_models/moss_image_sft_bf16.safetensors",
+    "/ai-toolkit/models/diffusion_models/qwen_image_bf16.safetensors",
+    "/ai-toolkit/models/text_encoders",
+    "/ai-toolkit/models/vae",
+    "/ai-toolkit/models/split_files",
+    "/ai-toolkit/models/.cache",
+    "/root/.cache/huggingface/hub/models--OpenMOSS-Team--MOSS-Image-Base",
+    "/root/.cache/huggingface/hub/.locks/models--OpenMOSS-Team--MOSS-Image-Base",
+    "/root/.cache/huggingface/hub/models--OpenMOSS-Team--MOSS-Image-SFT",
+    "/root/.cache/huggingface/hub/.locks/models--OpenMOSS-Team--MOSS-Image-SFT",
+    "/root/.cache/huggingface/hub/models--Qwen--Qwen-Image",
+    "/root/.cache/huggingface/hub/.locks/models--Qwen--Qwen-Image",
+    "/root/.cache/huggingface/hub/models--Qwen--Qwen-Image-2.1",
+    "/root/.cache/huggingface/hub/.locks/models--Qwen--Qwen-Image-2.1",
+    "/root/.cache/huggingface/hub/models--Qwen--Qwen-Image-2.1-Turbo",
+    "/root/.cache/huggingface/hub/.locks/models--Qwen--Qwen-Image-2.1-Turbo",
+    "/root/.cache/huggingface/hub/models--Qwen--Qwen-Image-2512",
+    "/root/.cache/huggingface/hub/.locks/models--Qwen--Qwen-Image-2512",
+    "/root/.cache/huggingface/hub/models--Qwen--Qwen-Image-Edit-2511",
+    "/root/.cache/huggingface/hub/.locks/models--Qwen--Qwen-Image-Edit-2511",
+    "/root/.cache/huggingface/hub/models--Qwen--Qwen3.5-9B",
+    "/root/.cache/huggingface/hub/.locks/models--Qwen--Qwen3.5-9B",
+    "/root/.cache/huggingface/hub/models--depth-anything--Depth-Anything-V2-Large-hf",
+    "/root/.cache/huggingface/hub/.locks/models--depth-anything--Depth-Anything-V2-Large-hf",
+    "/root/.cache/huggingface/xet",
+    "/ai-toolkit/testing/.gpu-acceptance",
+    "/ai-toolkit/testing/run_validation_gpu_debug.py",
+    "/tmp/runpod-validation-source.tar.gz"
+  ],
+  "retained_models": [
+    "/ai-toolkit/models/diffusion_models/qwen_image_2.1_bf16.safetensors",
+    "/ai-toolkit/models/qwen21-extras"
+  ],
+  "main_config_sha256": "c6d800e2cbd617f426d88f716b634fa0a5084d9dd5096fe18bfd523d683938dd",
+  "original_image_counts": {
+    "train": 107,
+    "val": 20
+  },
+  "gpu_idle": true,
+  "disk_free_before": 787259940864,
+  "disk_free_after": 1063838425088,
+  "temporary_test_directory_exists": false
+}

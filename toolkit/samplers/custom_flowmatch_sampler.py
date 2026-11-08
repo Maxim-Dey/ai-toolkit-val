@@ -56,7 +56,14 @@ class CustomFlowMatchEulerDiscreteScheduler(FlowMatchEulerDiscreteScheduler):
             self.linear_timesteps_weights2 = hbsmntw_weighing
             pass
 
-    def get_weights_for_timesteps(self, timesteps: torch.Tensor, v2=False, timestep_type="linear", x0_pred=False) -> torch.Tensor:
+    def get_weights_for_timesteps(self, timesteps: torch.Tensor, v2=False, timestep_type="linear", x0_pred=False, interpolate=False) -> torch.Tensor:
+        if interpolate:
+            from toolkit.validation import interpolate_weights
+            if timestep_type == 'weighted':
+                weights = x0_weighing_scheme if x0_pred else default_weighing_scheme
+            else:
+                weights = self.linear_timesteps_weights2 if v2 else self.linear_timesteps_weights
+            return interpolate_weights(timesteps, self.timesteps, weights)
         # Get the indices of the timesteps
         step_indices = [(self.timesteps == t).nonzero().item()
                         for t in timesteps]

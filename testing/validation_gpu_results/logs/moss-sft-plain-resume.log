@@ -1,0 +1,172 @@
+{
+    "type": "sd_trainer",
+    "training_folder": "/ai-toolkit/testing/.gpu-acceptance/output",
+    "training_seed": 42,
+    "logging": {
+        "log_every": 100
+    },
+    "device": "cuda:0",
+    "network": {
+        "type": "lora",
+        "linear": 32,
+        "linear_alpha": 32
+    },
+    "save": {
+        "dtype": "float32",
+        "save_every": 2,
+        "max_step_saves_to_keep": 2
+    },
+    "train_datasets": [
+        {
+            "train_path": "/ai-toolkit/testing/.gpu-acceptance/data/train",
+            "resolution": [
+                256
+            ],
+            "caption_dropout_rate": 0,
+            "cache_latents_to_disk": true,
+            "cache_text_embeddings": true,
+            "mask_path": "/ai-toolkit/testing/.gpu-acceptance/data/masks/train"
+        }
+    ],
+    "val_datasets": [
+        {
+            "val_path": "/ai-toolkit/testing/.gpu-acceptance/data/val",
+            "resolution": [
+                256
+            ],
+            "val_every_n_steps": 2,
+            "val_seed_noise": 42,
+            "val_level_noise_n": 8,
+            "val_seed_noise_n": 2
+        },
+        {
+            "val_path": "/ai-toolkit/testing/.gpu-acceptance/data/val",
+            "resolution": [
+                256
+            ],
+            "val_every_n_steps": 2,
+            "val_seed_noise": 42,
+            "val_level_noise_n": 8,
+            "val_seed_noise_n": 2,
+            "mask_path": "/ai-toolkit/testing/.gpu-acceptance/data/masks/val"
+        }
+    ],
+    "train": {
+        "lr": 0.0001,
+        "batch_size": 1,
+        "steps": 3,
+        "gradient_accumulation": 2,
+        "train_unet": true,
+        "train_text_encoder": false,
+        "gradient_checkpointing": true,
+        "noise_scheduler": "flowmatch",
+        "optimizer": "adamw8bit",
+        "timestep_type": "shift",
+        "content_or_style": "balanced",
+        "loss_type": "mse",
+        "loss_target": "noise",
+        "optimizer_params": {
+            "weight_decay": 0.0001
+        },
+        "skip_first_sample": false,
+        "force_first_sample": false,
+        "disable_sampling": false,
+        "dtype": "bf16",
+        "num_workers": 0
+    },
+    "model": {
+        "name_or_path": "OpenMOSS-Team/MOSS-Image-SFT",
+        "arch": "moss_image",
+        "quantize": false,
+        "quantize_te": false,
+        "low_vram": false,
+        "model_kwargs": {
+            "edit": false
+        },
+        "compile": false,
+        "extras_name_or_path": "OpenMOSS-Team/MOSS-Image-SFT",
+        "vae_dtype": "float32"
+    },
+    "sample": {
+        "sampler": "flowmatch",
+        "sample_every": 2,
+        "sample_start_step": 0,
+        "width": 256,
+        "height": 256,
+        "samples": [
+            {
+                "prompt": "A metal object on a neutral background."
+            }
+        ],
+        "neg": "",
+        "seed": 42,
+        "walk_seed": false,
+        "guidance_scale": 3,
+        "sample_steps": 4
+    },
+    "resume_from": "/ai-toolkit/testing/.gpu-acceptance/output/acceptance-moss-sft-plain/acceptance-moss-sft-plain-step000002"
+}
+
+#############################################
+# Running job: acceptance-moss-sft-plain
+#############################################
+
+
+Running  1 process
+Loading MOSS-Image model
+Loading transformer (MossImageTransformer)
+ - transformer weights: /ai-toolkit/models/diffusion_models/moss_image_sft_bf16.safetensors
+Loading Qwen3.5 text encoder from /ai-toolkit/models/text_encoders/qwen3.5_9b_bf16.safetensors
+Loading VAE
+Model Loaded
+create LoRA network. base dim (rank): 32, alpha: 32
+neuron dropout: p=None, rank dropout: p=None, module dropout: p=None
+create LoRA for Text Encoder: 0 modules.
+create LoRA for U-Net: 168 modules.
+enable LoRA for U-Net
+#### IMPORTANT RESUMING FROM /ai-toolkit/testing/.gpu-acceptance/output/acceptance-moss-sft-plain/acceptance-moss-sft-plain-step000002/model.safetensors ####
+Loading from /ai-toolkit/testing/.gpu-acceptance/output/acceptance-moss-sft-plain/acceptance-moss-sft-plain-step000002/model.safetensors
+Missing keys: []
+Dataset: /ai-toolkit/testing/.gpu-acceptance/data/val
+  -  Preprocessing image dimensions
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:00<00:00, 47.59it/s]
+  -  Found 1 images
+Bucket sizes for /ai-toolkit/testing/.gpu-acceptance/data/val:
+256x256: 1 files
+1 buckets made
+Dataset: /ai-toolkit/testing/.gpu-acceptance/data/val
+  -  Preprocessing image dimensions
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:00<00:00, 10082.46it/s]
+  -  Found 1 images
+Bucket sizes for /ai-toolkit/testing/.gpu-acceptance/data/val:
+256x256: 1 files
+1 buckets made
+Dataset: /ai-toolkit/testing/.gpu-acceptance/data/train
+  -  Preprocessing image dimensions
+  0%|          | 0/2 [00:00<?, ?it/s]100%|██████████| 2/2 [00:00<00:00, 11214.72it/s]
+  -  Found 2 images
+Bucket sizes for /ai-toolkit/testing/.gpu-acceptance/data/train:
+256x256: 2 files
+1 buckets made
+Caching latents for /ai-toolkit/testing/.gpu-acceptance/data/train
+ - Saving latents to disk
+Caching latents to disk:   0%|          | 0/2 [00:00<?, ?it/s]Caching latents to disk: 100%|██████████| 2/2 [00:00<00:00, 1742.91it/s]
+Caching text_embeddings for /ai-toolkit/testing/.gpu-acceptance/data/train
+ - Saving text embeddings to disk
+Caching text embeddings to disk:   0%|          | 0/2 [00:00<?, ?it/s]Caching text embeddings to disk: 100%|██████████| 2/2 [00:00<00:00, 7430.12it/s]
+Caching embeddings and unloading text encoder
+
+***** UNLOADING TEXT ENCODER *****
+Embeddings cached to disk. We dont need the text encoder anymore
+***********************************
+
+GPU audit: validation at step 2
+GPU audit: repeated metrics {'fixed_checks_digest': '6beeed79ef143ce46b5ae94cacd397c512a47b4d7003a5a7b8536c037854e33e', 'vae_encodes_during_validation': 0, 'val_loss_mean': 0.27045498322695494, 'val_loss_low_noise': 0.2844384452328086, 'val_loss_high_noise': 0.2564715212211013, 'repeat_max_abs_delta': 0.0}
+acceptance-moss-sft-plain:  67%|██████▋   | 2/3 [00:00<?, ?it/s]GPU audit: comparing next update with and without validation
+GPU audit: next update delta=0.0, RNG equal=True
+acceptance-moss-sft-plain:  67%|██████▋   | 2/3 [00:05<?, ?it/s, lr: 1.0e-04 loss: 4.764e-01]acceptance-moss-sft-plain: 100%|██████████| 3/3 [00:05<00:00,  5.71s/it, lr: 1.0e-04 loss: 4.764e-01]GPU audit: validation at step 3
+GPU audit: repeated metrics {'fixed_checks_digest': '6beeed79ef143ce46b5ae94cacd397c512a47b4d7003a5a7b8536c037854e33e', 'vae_encodes_during_validation': 0, 'val_loss_mean': 0.26976288901641965, 'val_loss_low_noise': 0.28427433129400015, 'val_loss_high_noise': 0.25525144673883915, 'repeat_max_abs_delta': 0.0}
+acceptance-moss-sft-plain: 100%|██████████| 3/3 [00:10<00:00, 10.98s/it, lr: 1.0e-04 loss: 4.764e-01]
+Generating Samples:   0%|          | 0/1 [00:00<?, ?it/s]Generating Samples: 100%|██████████| 1/1 [00:00<00:00,  1.21it/s]Generating Samples: 100%|██████████| 1/1 [00:00<00:00,  1.21it/s]
+
+

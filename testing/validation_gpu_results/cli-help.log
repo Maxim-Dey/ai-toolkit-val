@@ -1,0 +1,15 @@
+usage: run.py [-h] [-r] [-n NAME] [-l LOG]
+              config_file_list [config_file_list ...]
+
+positional arguments:
+  config_file_list      Name of config file (eg: person_v1 for
+                        config/person_v1.json/yaml), or full path if it is not
+                        in config folder, you can pass multiple config files
+                        and run them all sequentially
+
+options:
+  -h, --help            show this help message and exit
+  -r, --recover         Continue running additional jobs even if a job fails
+  -n NAME, --name NAME  Name to replace [name] tag in config file, useful for
+                        shared config file
+  -l LOG, --log LOG     Log file to write output to

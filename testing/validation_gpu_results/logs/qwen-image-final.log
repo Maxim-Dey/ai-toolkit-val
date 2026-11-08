@@ -1,0 +1,178 @@
+{
+    "type": "sd_trainer",
+    "training_folder": "/ai-toolkit/testing/.gpu-acceptance/output",
+    "training_seed": 42,
+    "logging": {
+        "log_every": 100
+    },
+    "device": "cuda:0",
+    "network": {
+        "type": "lora",
+        "linear": 32,
+        "linear_alpha": 32
+    },
+    "save": {
+        "dtype": "float32",
+        "save_every": 2,
+        "max_step_saves_to_keep": 2
+    },
+    "train_datasets": [
+        {
+            "train_path": "/ai-toolkit/testing/.gpu-acceptance/data/train",
+            "resolution": [
+                256
+            ],
+            "caption_dropout_rate": 0,
+            "cache_latents_to_disk": true,
+            "cache_text_embeddings": true,
+            "mask_path": "/ai-toolkit/testing/.gpu-acceptance/data/masks/train"
+        }
+    ],
+    "val_datasets": [
+        {
+            "val_path": "/ai-toolkit/testing/.gpu-acceptance/data/val",
+            "resolution": [
+                256
+            ],
+            "val_every_n_steps": 2,
+            "val_seed_noise": 42,
+            "val_level_noise_n": 8,
+            "val_seed_noise_n": 2
+        },
+        {
+            "val_path": "/ai-toolkit/testing/.gpu-acceptance/data/val",
+            "resolution": [
+                256
+            ],
+            "val_every_n_steps": 2,
+            "val_seed_noise": 42,
+            "val_level_noise_n": 8,
+            "val_seed_noise_n": 2,
+            "mask_path": "/ai-toolkit/testing/.gpu-acceptance/data/masks/val"
+        }
+    ],
+    "train": {
+        "lr": 0.0001,
+        "batch_size": 1,
+        "steps": 3,
+        "gradient_accumulation": 2,
+        "train_unet": true,
+        "train_text_encoder": false,
+        "gradient_checkpointing": true,
+        "noise_scheduler": "flowmatch",
+        "optimizer": "adamw8bit",
+        "timestep_type": "shift",
+        "content_or_style": "balanced",
+        "loss_type": "mse",
+        "loss_target": "noise",
+        "optimizer_params": {
+            "weight_decay": 0.0001
+        },
+        "skip_first_sample": false,
+        "force_first_sample": false,
+        "disable_sampling": false,
+        "dtype": "bf16",
+        "num_workers": 0
+    },
+    "model": {
+        "name_or_path": "Qwen/Qwen-Image",
+        "arch": "qwen_image",
+        "quantize": false,
+        "quantize_te": false,
+        "low_vram": false,
+        "model_kwargs": {},
+        "compile": false,
+        "extras_name_or_path": "Qwen/Qwen-Image",
+        "vae_dtype": "float32"
+    },
+    "sample": {
+        "sampler": "flowmatch",
+        "sample_every": 2,
+        "sample_start_step": 0,
+        "width": 256,
+        "height": 256,
+        "samples": [
+            {
+                "prompt": "A large gold coin with a '\u20bd' mark is in the center on an empty background."
+            }
+        ],
+        "neg": "",
+        "seed": 42,
+        "walk_seed": false,
+        "guidance_scale": 3,
+        "sample_steps": 4
+    }
+}
+
+#############################################
+# Running job: acceptance-qwen-image-final
+#############################################
+
+
+Running  1 process
+Loading Qwen Image model
+Loading transformer
+Text Encoder
+Loading weights:   0%|          | 0/729 [00:00<?, ?it/s]Loading weights:  24%|██▎       | 172/729 [00:00<00:00, 1686.44it/s]Loading weights:  47%|████▋     | 341/729 [00:00<00:00, 1524.95it/s]Loading weights:  68%|██████▊   | 497/729 [00:00<00:00, 1517.28it/s]Loading weights:  96%|█████████▌| 699/729 [00:00<00:00, 1684.49it/s]Loading weights: 100%|██████████| 729/729 [00:00<00:00, 1665.27it/s]
+Loading VAE
+Making pipe
+Preparing Model
+Model Loaded
+create LoRA network. base dim (rank): 32, alpha: 32
+neuron dropout: p=None, rank dropout: p=None, module dropout: p=None
+create LoRA for Text Encoder: 0 modules.
+create LoRA for U-Net: 840 modules.
+enable LoRA for U-Net
+Dataset: /ai-toolkit/testing/.gpu-acceptance/data/val
+  -  Preprocessing image dimensions
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:00<00:00, 7319.90it/s]
+  -  Found 1 images
+Bucket sizes for /ai-toolkit/testing/.gpu-acceptance/data/val:
+256x256: 1 files
+1 buckets made
+Dataset: /ai-toolkit/testing/.gpu-acceptance/data/val
+  -  Preprocessing image dimensions
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:00<00:00, 10280.16it/s]
+  -  Found 1 images
+Bucket sizes for /ai-toolkit/testing/.gpu-acceptance/data/val:
+256x256: 1 files
+1 buckets made
+Dataset: /ai-toolkit/testing/.gpu-acceptance/data/train
+  -  Preprocessing image dimensions
+  0%|          | 0/2 [00:00<?, ?it/s]100%|██████████| 2/2 [00:00<00:00, 10407.70it/s]
+  -  Found 2 images
+Bucket sizes for /ai-toolkit/testing/.gpu-acceptance/data/train:
+256x256: 2 files
+1 buckets made
+Caching latents for /ai-toolkit/testing/.gpu-acceptance/data/train
+ - Saving latents to disk
+Caching latents to disk:   0%|          | 0/2 [00:00<?, ?it/s]Caching latents to disk:  50%|█████     | 1/2 [00:12<00:12, 12.25s/it]Caching latents to disk: 100%|██████████| 2/2 [00:12<00:00,  6.14s/it]
+Caching text_embeddings for /ai-toolkit/testing/.gpu-acceptance/data/train
+ - Saving text embeddings to disk
+Caching text embeddings to disk:   0%|          | 0/2 [00:00<?, ?it/s]Caching text embeddings to disk:  50%|█████     | 1/2 [00:06<00:06,  6.42s/it]Caching text embeddings to disk: 100%|██████████| 2/2 [00:06<00:00,  3.21s/it]
+Caching embeddings and unloading text encoder
+
+***** UNLOADING TEXT ENCODER *****
+Embeddings cached to disk. We dont need the text encoder anymore
+***********************************
+
+GPU audit: validation at step 0
+GPU audit: repeated metrics {'fixed_checks_digest': '9772fd1cf06c5112337f1080705c7ca083865b426b6853e26130fd40094000fe', 'vae_encodes_during_validation': 0, 'val_loss_mean': 0.11474863276816905, 'val_loss_low_noise': 0.08894388796761632, 'val_loss_high_noise': 0.14055337756872177, 'repeat_max_abs_delta': 0.0}
+GPU audit: last-check failure published no metrics
+Generating baseline samples before training
+Generating Samples:   0%|          | 0/1 [00:00<?, ?it/s]Generating Samples: 100%|██████████| 1/1 [00:02<00:00,  2.29s/it]Generating Samples: 100%|██████████| 1/1 [00:02<00:00,  2.29s/it]
+
+acceptance-qwen-image-final:   0%|          | 0/3 [00:00<?, ?it/s]GPU audit: comparing next update with and without validation
+GPU audit: next update delta=0.0, RNG equal=True
+acceptance-qwen-image-final:   0%|          | 0/3 [00:18<?, ?it/s, lr: 1.0e-04 loss: 7.037e-02]acceptance-qwen-image-final:  33%|███▎      | 1/3 [00:18<00:37, 18.84s/it, lr: 1.0e-04 loss: 7.037e-02]GPU audit: validation at step 2
+GPU audit: repeated metrics {'fixed_checks_digest': '9772fd1cf06c5112337f1080705c7ca083865b426b6853e26130fd40094000fe', 'vae_encodes_during_validation': 0, 'val_loss_mean': 0.11465884582139552, 'val_loss_low_noise': 0.08879641350358725, 'val_loss_high_noise': 0.1405212781392038, 'repeat_max_abs_delta': 0.0}
+acceptance-qwen-image-final:  33%|███▎      | 1/3 [00:42<00:37, 18.84s/it, lr: 1.0e-04 loss: 1.385e-01]
+Saving at step 2
+Generating Samples:   0%|          | 0/1 [00:00<?, ?it/s]Generating Samples: 100%|██████████| 1/1 [00:02<00:00,  2.30s/it]Generating Samples: 100%|██████████| 1/1 [00:02<00:00,  2.30s/it]
+
+acceptance-qwen-image-final:  67%|██████▋   | 2/3 [00:45<00:18, 18.84s/it, lr: 1.0e-04 loss: 8.988e-02]acceptance-qwen-image-final: 100%|██████████| 3/3 [00:45<00:00,  3.62s/it, lr: 1.0e-04 loss: 8.988e-02]GPU audit: validation at step 3
+GPU audit: repeated metrics {'fixed_checks_digest': '9772fd1cf06c5112337f1080705c7ca083865b426b6853e26130fd40094000fe', 'vae_encodes_during_validation': 0, 'val_loss_mean': 0.1148642092011869, 'val_loss_low_noise': 0.08878584066405892, 'val_loss_high_noise': 0.14094257773831487, 'repeat_max_abs_delta': 0.0}
+acceptance-qwen-image-final: 100%|██████████| 3/3 [01:06<00:00, 22.09s/it, lr: 1.0e-04 loss: 8.988e-02]
+Generating Samples:   0%|          | 0/1 [00:00<?, ?it/s]Generating Samples: 100%|██████████| 1/1 [00:02<00:00,  2.31s/it]Generating Samples: 100%|██████████| 1/1 [00:02<00:00,  2.31s/it]
+
+

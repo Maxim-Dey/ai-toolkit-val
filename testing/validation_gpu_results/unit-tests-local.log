@@ -1,0 +1,101 @@
+WARNING:torchao.kernel.intmm:Warning: Detected no triton, on systems without Triton certain kernels will not work
+W1109 02:57:02.671000 14640 .venv\Lib\site-packages\torch\distributed\elastic\multiprocessing\redirects.py:29] NOTE: Redirects are currently not supported in Windows or MacOs.
+C:\Users\inbox\Desktop\ai-toolkit-val\.venv\Lib\site-packages\albumentations\__init__.py:13: UserWarning: A new version of Albumentations is available: 2.0.8 (you have 1.4.15). Upgrade using: pip install -U albumentations. To disable automatic update checks, set the environment variable NO_ALBUMENTATIONS_UPDATE to 1.
+  check_for_updates()
+Dataset: C:\Users\inbox\AppData\Local\Temp\tmpf9d2s97k\val
+  -  Preprocessing image dimensions
+
+  0%|          | 0/2 [00:00<?, ?it/s]
+100%|##########| 2/2 [00:00<?, ?it/s]
+  -  Found 2 images
+Bucket sizes for C:\Users\inbox\AppData\Local\Temp\tmpf9d2s97k\val:
+64x64: 2 files
+1 buckets made
+Dataset: C:\Users\inbox\AppData\Local\Temp\tmpf9d2s97k\val
+  -  Preprocessing image dimensions
+
+  0%|          | 0/2 [00:00<?, ?it/s]
+100%|##########| 2/2 [00:00<?, ?it/s]
+  -  Found 2 images
+Bucket sizes for C:\Users\inbox\AppData\Local\Temp\tmpf9d2s97k\val:
+64x64: 2 files
+1 buckets made
+Dataset: C:\Users\inbox\AppData\Local\Temp\tmpf9d2s97k\val
+  -  Preprocessing image dimensions
+
+  0%|          | 0/2 [00:00<?, ?it/s]
+100%|##########| 2/2 [00:00<?, ?it/s]
+  -  Found 2 images
+Bucket sizes for C:\Users\inbox\AppData\Local\Temp\tmpf9d2s97k\val:
+64x64: 2 files
+1 buckets made
+Dataset: C:\Users\inbox\AppData\Local\Temp\tmp6bzqq54s\val
+  -  Preprocessing image dimensions
+
+  0%|          | 0/2 [00:00<?, ?it/s]
+100%|##########| 2/2 [00:00<00:00, 1143.17it/s]
+  -  Found 2 images
+Bucket sizes for C:\Users\inbox\AppData\Local\Temp\tmp6bzqq54s\val:
+64x64: 2 files
+1 buckets made
+Dataset: C:\Users\inbox\AppData\Local\Temp\tmp6bzqq54s\val
+  -  Preprocessing image dimensions
+
+  0%|          | 0/2 [00:00<?, ?it/s]
+100%|##########| 2/2 [00:00<?, ?it/s]
+  -  Found 2 images
+Bucket sizes for C:\Users\inbox\AppData\Local\Temp\tmp6bzqq54s\val:
+64x64: 2 files
+1 buckets made
+Dataset: C:\Users\inbox\AppData\Local\Temp\tmpkr2nw9bw\val
+  -  Preprocessing image dimensions
+
+  0%|          | 0/2 [00:00<?, ?it/s]
+100%|##########| 2/2 [00:00<?, ?it/s]
+C:\Users\inbox\Desktop\ai-toolkit-val\.venv\Lib\site-packages\pytorch_wavelets\dtcwt\coeffs.py:7: DeprecationWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html
+  from pkg_resources import resource_stream
+WARNING:tensorboard:Detected out of order event.step likely caused by a TensorFlow restart. Purging expired events from Tensorboard display between the previous step: -1 (timestamp: -1) and current step: 20 (timestamp: 1794167828.783398). Removing 6 scalars, 0 histograms, 0 compressed histograms, 0 images, and 0 audio.
+  -  Found 2 images
+Bucket sizes for C:\Users\inbox\AppData\Local\Temp\tmpkr2nw9bw\val:
+64x64: 2 files
+1 buckets made
+Dataset: C:\Users\inbox\AppData\Local\Temp\tmpdmt5t14n\val
+  -  Preprocessing image dimensions
+
+  0%|          | 0/2 [00:00<?, ?it/s]
+100%|##########| 2/2 [00:00<00:00, 533.12it/s]
+  -  Found 2 images
+Bucket sizes for C:\Users\inbox\AppData\Local\Temp\tmpdmt5t14n\val:
+64x64: 2 files
+1 buckets made
+Dataset: C:\Users\inbox\AppData\Local\Temp\tmpdmt5t14n\val
+  -  Preprocessing image dimensions
+
+  0%|          | 0/2 [00:00<?, ?it/s]
+100%|##########| 2/2 [00:00<00:00, 997.81it/s]
+  -  Found 2 images
+Bucket sizes for C:\Users\inbox\AppData\Local\Temp\tmpdmt5t14n\val:
+64x64: 2 files
+1 buckets made
+Dataset: C:\Users\inbox\AppData\Local\Temp\tmpdmt5t14n\val
+  -  Preprocessing image dimensions
+
+  0%|          | 0/2 [00:00<?, ?it/s]
+100%|##########| 2/2 [00:00<?, ?it/s]
+  -  Found 2 images
+Bucket sizes for C:\Users\inbox\AppData\Local\Temp\tmpdmt5t14n\val:
+64x64: 2 files
+1 buckets made
+Dataset: C:\Users\inbox\AppData\Local\Temp\tmpdmt5t14n\val
+  -  Preprocessing image dimensions
+
+  0%|          | 0/2 [00:00<?, ?it/s]
+100%|##########| 2/2 [00:00<?, ?it/s]
+----------------------------------------------------------------------
+Ran 48 tests in 6.825s
+
+OK
+  -  Found 2 images
+Bucket sizes for C:\Users\inbox\AppData\Local\Temp\tmpdmt5t14n\val:
+64x64: 2 files
+1 buckets made

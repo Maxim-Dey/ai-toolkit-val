@@ -244,6 +244,8 @@ class DataLoaderBatchDTO:
             self.latents: Union[torch.Tensor, None] = None
             self.control_tensor: Union[torch.Tensor, None] = None
             self.control_tensor_list: Union[List[List[torch.Tensor]], None] = None
+            self.fixed_condition_latents = None
+            self.fixed_condition_metadata = None
             self.clip_image_tensor: Union[torch.Tensor, None] = None
             self.mask_tensor: Union[torch.Tensor, None] = None
             self.unaugmented_tensor: Union[torch.Tensor, None] = None

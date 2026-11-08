@@ -30,8 +30,8 @@ class QwenImageVAEHolderMixin:
         self.vae.eval()
         self.vae.requires_grad_(False)
 
-        image_list = [image.to(device, dtype=dtype) for image in image_list]
-        images = torch.stack(image_list).to(device, dtype=dtype)
+        image_list = [image.to(device, dtype=self.vae.dtype) for image in image_list]
+        images = torch.stack(image_list)
         images = images.unsqueeze(2)  # add the frame dim
         latents = self.vae.encode(images).latent_dist.sample()
 
@@ -57,7 +57,7 @@ class QwenImageVAEHolderMixin:
         if self.vae.device == torch.device("cpu"):
             self.vae.to(device)
 
-        latents = latents.to(device, dtype=dtype)
+        latents = latents.to(device, dtype=self.vae.dtype)
         latents = latents.unsqueeze(2)  # add the frame dim
 
         latents_mean = (

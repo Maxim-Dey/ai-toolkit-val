@@ -1,0 +1,8 @@
+{
+  "turbo_revision": "fc13ba1986fcb905854dc8de2f52eee395f49b5b",
+  "paths": [
+    "/ai-toolkit/models/diffusion_models/qwen_image_2.1_bf16.safetensors",
+    "/ai-toolkit/models/text_encoders/qwen3vl_8b_bf16.safetensors",
+    "/ai-toolkit/models/vae/qwen_image_2.1_vae_bf16.safetensors"
+  ]
+}
